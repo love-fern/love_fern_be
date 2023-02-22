@@ -1,0 +1,5 @@
+class Fern < ApplicationRecord
+  
+
+
+end
