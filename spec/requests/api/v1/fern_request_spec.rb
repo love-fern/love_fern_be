@@ -78,7 +78,6 @@ RSpec.describe "ferns API endpoints" do
   it 'can ceate a new fern' do
     user1 = create(:user)
     shelf1 = create(:shelf, user_id: user1.id)
-    fern1 = create(:fern, shelf_id: shelf1.id)
     
     fern_params = ({
       name: 'The Big Pepperoni',
