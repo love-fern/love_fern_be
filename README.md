@@ -45,9 +45,10 @@ All tests should be passing if installation is successful.
 
 Love Fern was germinated to satisfy the requirements for a Turing Backend Mod 3 group project, Consultancy. Official project requirements can be read [here](https://backend.turing.edu/module3/projects/consultancy/).
 #### Learning Goals (keep updated)
-
-- Interact with two unique APIs.
-- Collaborate with a front end application to supply API endpoints in necessary ways
+- Design API endpoints so as to be easily digestible on the front end.
+- Explore how Open Authorization on the front end interacts with database access on the back end.
+- Building a full-scale application from scratch using service-oriented architecture.
+- Interact with two unique external APIs.
 #### Future Goals
 
 - Implement "watering frequency," which indicates how often a user wishes to interact with their fern before it starts to decay.
@@ -55,13 +56,14 @@ Love Fern was germinated to satisfy the requirements for a Turing Backend Mod 3 
 - Add the ability to search for a fern by name and order ferns by health.
 - Suggest multiple activities and gestures corresponding to varying levels of care needed for the fern.
 - Build out the fern health algorithm to incorporate activities and gifts, as well as a more nuanced interpretation of Google's sentiment analysis.
-
 #### Known Issues
 
 - In its current state, Love Fern's backend API is not private. Future goals are to require a private token that only the Love Fern frontend will have. Until then, please do not provide any information you deem sensitive.
 - The fertilize feature currently suggests a random activity to do with your fern's person. Please consider real life consequences are not our responsibility if you do ask your fern's person to do this activity.
 
-## Deployment
+## Database & Schema
+
+## Build Methods
 
 ## Authors & Acknowledgments
 
