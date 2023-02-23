@@ -8,7 +8,7 @@ RSpec.describe "user API requests" do
         google_id: "23948sdkss"
       }
     headers = { 'CONTENT_TYPE' => 'application/json' }
-    post '/api/v1/users', headers: headers, params: JSON.generate(user: google_auth_params)
+    post api_v1_users_path, headers: headers, params: JSON.generate(user: google_auth_params)
     created_user = User.last
 
     expect(response).to be_successful
@@ -24,7 +24,7 @@ RSpec.describe "user API requests" do
 
     name_change_params = { name: "this is my new name" }
     headers = { 'CONTENT_TYPE' => 'application/json' }
-    patch "/api/v1/user/#{id}", headers: headers, params: JSON.generate(user: name_change_params)
+    patch api_v1_user_path(id), headers: headers, params: JSON.generate(user: name_change_params)
 
     updated_user = User.find_by(id: id)
     expect(response).to be_successful
