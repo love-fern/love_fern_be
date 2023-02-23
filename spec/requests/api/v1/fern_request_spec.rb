@@ -8,7 +8,7 @@ RSpec.describe "ferns API endpoints" do
     fern2 = create(:fern, shelf_id: shelf1.id)
     fern3 = create(:fern, shelf_id: shelf1.id)
 
-    get api_v1_user_greenhouse_path(user1.id)
+    get api_v1_user_ferns_path(user1.id)
     expect(response).to be_successful
     ferns_hash = JSON.parse(response.body, symbolize_names: true)
     expect(ferns_hash).to have_key(:data)
@@ -73,5 +73,25 @@ RSpec.describe "ferns API endpoints" do
 
     expect(fern_data[:attributes]).to have_key(:shelf_id)
     expect(fern_data[:attributes][:shelf_id]).to be_a(Integer)
+  end
+
+  it 'can ceate a new fern' do
+    user1 = create(:user)
+    shelf1 = create(:shelf, user_id: user1.id)
+    fern1 = create(:fern, shelf_id: shelf1.id)
+    
+    fern_params = ({
+      name: 'The Big Pepperoni',
+      frequency: 7,
+      health: 6,
+      shelf_id: shelf1.id
+    })
+    headers = {"CONTENT_TYPE" => "application/json"}
+
+    post "/api/v1/users/#{user1.id}/ferns", headers: headers, params: JSON.generate(fern: fern_params)
+    created_fern = Fern.last
+
+    expect(response).to be_successful
+    expect(created_fern.name).to eq("The Big Pepperoni")
   end
 end
