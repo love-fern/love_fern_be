@@ -28,6 +28,6 @@ class Api::V1::Users::FernsController < ApplicationController
   end
 
   def fern_params
-    params.require(:fern).permit(:name, :frequency, :health, :shelf_id)
+    params.require(:fern).permit(:name, :frequency, :health, :shelf_id, :preferred_contact_method)
   end
 end

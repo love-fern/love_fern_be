@@ -4,9 +4,9 @@ RSpec.describe "ferns API endpoints" do
   it 'sends a list of all a users ferns' do
     user1 = create(:user)
     shelf1 = create(:shelf, user_id: user1.id)
-    fern1 = create(:fern, shelf_id: shelf1.id)
-    fern2 = create(:fern, shelf_id: shelf1.id)
-    fern3 = create(:fern, shelf_id: shelf1.id)
+    fern1 = create(:fern, shelf_id: shelf1.id, preferred_contact_method: "text")
+    fern2 = create(:fern, shelf_id: shelf1.id, preferred_contact_method: "text")
+    fern3 = create(:fern, shelf_id: shelf1.id, preferred_contact_method: "text")
 
     get api_v1_user_ferns_path(user1.id)
     expect(response).to be_successful
@@ -39,9 +39,9 @@ RSpec.describe "ferns API endpoints" do
   it 'can send the information of a single fern' do
     user1 = create(:user)
     shelf1 = create(:shelf, user_id: user1.id)
-    fern1 = create(:fern, shelf_id: shelf1.id)
-    fern2 = create(:fern, shelf_id: shelf1.id)
-    fern3 = create(:fern, shelf_id: shelf1.id)
+    fern1 = create(:fern, shelf_id: shelf1.id, preferred_contact_method: "text")
+    fern2 = create(:fern, shelf_id: shelf1.id, preferred_contact_method: "text")
+    fern3 = create(:fern, shelf_id: shelf1.id, preferred_contact_method: "text")
 
     get api_v1_user_fern_path(user1, fern1)
 
@@ -83,6 +83,7 @@ RSpec.describe "ferns API endpoints" do
       name: 'The Big Pepperoni',
       frequency: 7,
       health: 6,
+      preferred_contact_method: "text",
       shelf_id: shelf1.id
     })
     headers = {"CONTENT_TYPE" => "application/json"}
