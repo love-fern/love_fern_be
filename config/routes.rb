@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :users, only: [:create, :update] do 
         resources :ferns, only: [:index, :show, :create, :update, :destroy], controller: "users/ferns"
+        resources :shelves, only: [:create, :update, :destroy], controller: "users/shelves"
       end
     end
   end
