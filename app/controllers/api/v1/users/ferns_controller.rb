@@ -18,4 +18,18 @@ class Api::V1::Users::FernsController < ApplicationController
   def fern_params
     params.require(:fern).permit(:name, :frequency, :health, :shelf_id)
   end
+
+  def update
+    render json: FernSerializer.new(Fern.update(update_params))
+  end
+
+  def destroy
+    Fern.find(params[:id]).destroy
+  end
+
+  private
+
+  def update_params
+    params.require(:fern).permit(:name, :frequency, :shelf_id, :preferred_contact_method)
+  end
 end
