@@ -119,6 +119,18 @@ RSpec.describe "ferns API endpoints" do
     expect(updated_fern.name).to eq("Fernilicious")
     expect(updated_fern.frequency).to eq(7)
     expect(updated_fern.preferred_contact_method).to eq("Don't")
+  end
 
+  it 'can delete a fern from the database' do
+    user = create(:user)
+    shelf = create(:shelf, user_id: user.id)
+    fern = create(:fern, shelf_id: shelf.id)
+
+    expect(Fern.find_by(id: fern.id)).to eq(fern)
+
+    delete api_v1_user_fern_path(user.id, fern.id)
+
+    expect(response).to be_successful
+    expect{ Fern.find(fern.id) }.to raise_error(ActiveRecord::RecordNotFound)
   end
 end
