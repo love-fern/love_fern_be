@@ -5,6 +5,7 @@ Rails.application.routes.draw do
       namespace :users do
         get '/greenhouse', to: "ferns#index"
       end
+      resources :users, only: [:create]
     end
   end
 end
