@@ -1,5 +1,4 @@
 class Fern < ApplicationRecord
-  belongs_to :user
-
+  belongs_to :shelf
 
 end
