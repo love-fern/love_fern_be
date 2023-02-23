@@ -1,5 +1,5 @@
-class FernsController
+class Api::V1::Users::FernsController
   def index
-    @user = 
+    @user = UserSerializer.new
   end
 end
