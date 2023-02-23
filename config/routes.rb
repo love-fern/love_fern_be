@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :users, only: [:create, :update] do 
-        resources :ferns, only: [:index, :show, :create, :update], controller: "users/ferns"
+        resources :ferns, only: [:index, :show, :create, :update, :destroy], controller: "users/ferns"
       end
     end
   end

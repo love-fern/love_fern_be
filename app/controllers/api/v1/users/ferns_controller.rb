@@ -16,6 +16,10 @@ class Api::V1::Users::FernsController < ApplicationController
     render json: FernSerializer.new(Fern.update(update_params))
   end
 
+  def destroy
+    Fern.find(params[:id]).destroy
+  end
+
   private
 
   def update_params
