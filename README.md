@@ -1,4 +1,4 @@
-# Love Fern (Front End)
+# Love Fern (Back End)
 
 [IMAGE / GIF]
 
@@ -22,7 +22,7 @@ Because this is the back end repository, database migration is also necessary, r
 ```
 rails db:migrate
 ```
-Inspect the `/db/schema.rb` and compare to the 'Schema' section below to ensure this migration has been done sucessfully.
+Inspect the `/db/schema.rb` and compare to the 'Schema' section below to ensure this migration has been done successfully.
 
 ### RSpec Suite
 
@@ -38,17 +38,36 @@ All tests should be passing if installation is successful.
 
 - APIs can be called locally using a program like Postman. (link)
 
-## List of Endpoints
+## List of Endpoints (keep updated)
 
 - GET '/ferns?user_id={{user.id}}' Returns all ferns
 ## Goals
 
-### Learning Goals
+Love Fern was germinated to satisfy the requirements for a Turing Backend Mod 3 group project, Consultancy. Official project requirements can be read [here](https://backend.turing.edu/module3/projects/consultancy/).
+#### Learning Goals (keep updated)
 
-### Future Goals
+- Interact with two unique APIs.
+- Collaborate with a front end application to supply API endpoints in necessary ways
+#### Future Goals
 
-### Known Issues
+- Implement "watering frequency," which indicates how often a user wishes to interact with their fern before it starts to decay.
+- Add more detailed stats to the fern show page, including time since last contact and information about the nature of that contact.
+- Add the ability to search for a fern by name and order ferns by health.
+- Suggest multiple activities and gestures corresponding to varying levels of care needed for the fern.
+- Build out the fern health algorithm to incorporate activities and gifts, as well as a more nuanced interpretation of Google's sentiment analysis.
 
-## Database and Schema
+#### Known Issues
+
+- In its current state, Love Fern's backend API is not private. Future goals are to require a private token that only the Love Fern frontend will have. Until then, please do not provide any information you deem sensitive.
+- The fertilize feature currently suggests a random activity to do with your fern's person. Please consider real life consequences are not our responsibility if you do ask your fern's person to do this activity.
+
+## Deployment
 
 ## Authors & Acknowledgments
+
+- Samuel Cox - samc1253@gmail.com
+- Drew Layton - dlayton66@gmail.com
+- Anthony Ongaro - aongaro@gmail.com
+- Brady Rohrig - brady.rohrig@gmail.com
+- J Seymour - JustJakeSeymour@gmail.com
+- Anthony Blackwell Tallent - anthonytallent567@gmail.com
