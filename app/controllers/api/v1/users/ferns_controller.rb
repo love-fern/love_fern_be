@@ -9,7 +9,14 @@ class Api::V1::Users::FernsController < ApplicationController
   end
 
   def create
-    
+    new_fern = Fern.create(fern_params)
+    render json: FernSerializer.new(new_fern)
+  end
+
+  private
+
+  def fern_params
+    params.require(:fern).permit(:name, :frequency, :health, :shelf_id)
   end
 
   def update
