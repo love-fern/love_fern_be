@@ -10,20 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_02_22_234441) do
+ActiveRecord::Schema.define(version: 2023_02_23_020241) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "ferns", force: :cascade do |t|
     t.string "name"
-    t.integer "duration"
-    t.string "tag"
     t.integer "health", default: 6
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "preferred_contact_method"
+    t.integer "frequency"
+    t.bigint "shelf_id"
+    t.index ["shelf_id"], name: "index_ferns_on_shelf_id"
+  end
+
+  create_table "shelves", force: :cascade do |t|
     t.bigint "user_id"
-    t.index ["user_id"], name: "index_ferns_on_user_id"
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_shelves_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -34,5 +42,6 @@ ActiveRecord::Schema.define(version: 2023_02_22_234441) do
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "ferns", "users"
+  add_foreign_key "ferns", "shelves"
+  add_foreign_key "shelves", "users"
 end
