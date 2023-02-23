@@ -1,24 +1,54 @@
-# README
+# Love Fern (Front End)
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+[IMAGE / GIF]
 
-Things you may want to cover:
+Love Fern is an application that allows the user to cultivate their relationships with others in their lives, by taking care of a fern. This is the back end of the application, which will focus on ______________________________.
 
-* Ruby version
+## Getting Started
 
-* System dependencies
+This is a Ruby on Rails application which establishes API endpoints to be called in the `love_fern_fe` repository. To run the entire application locally, both repositories will need to be cloned and set up.
 
-* Configuration
+### Installation
 
-* Database creation
+To install gems, run:
+```
+bundle install
+```
+Then to establish a database, run:
+```
+rails db:create
+```
+Because this is the back end repository, database migration is also necessary, run:
+```
+rails db:migrate
+```
+Inspect the `/db/schema.rb` and compare to the 'Schema' section below to ensure this migration has been done sucessfully.
 
-* Database initialization
+### RSpec Suite
 
-* How to run the test suite
+Once `love_fern_be` is correctly installed, run tests to ensure the repository works as intended locally.
 
-* Services (job queues, cache servers, search engines, etc.)
+To test the entire spec suite, run:
+```
+bundle exec rspec spec/
+```
+All tests should be passing if installation is successful.
 
-* Deployment instructions
+### Calling APIs
 
-* ...
+- APIs can be called locally using a program like Postman. (link)
+
+## List of Endpoints
+
+- GET '/ferns?user_id={{user.id}}' Returns all ferns
+## Goals
+
+### Learning Goals
+
+### Future Goals
+
+### Known Issues
+
+## Database and Schema
+
+## Authors & Acknowledgments
