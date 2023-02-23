@@ -4,7 +4,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :users, only: [:create] do 
         get '/greenhouse', to: "users/ferns#index"
-        resources :ferns, only: [:show]
+        resources :ferns, only: [:show], controller: "users/ferns"
       end
     end
   end
