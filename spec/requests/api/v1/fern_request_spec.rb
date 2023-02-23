@@ -94,4 +94,31 @@ RSpec.describe "ferns API endpoints" do
     expect(response).to be_successful
     expect(created_fern.name).to eq("The Big Pepperoni")
   end
+
+  it 'can update an existing fern' do
+    user = create(:user)
+    shelf = create(:shelf, user_id: user.id)
+    shelf2 = create(:shelf, user_id: user.id)
+    fern = create(:fern, 
+                  shelf_id: shelf.id, 
+                  name: "Fergie Fern", 
+                  frequency: 3, 
+                  preferred_contact_method: "email")
+    fern_id = fern.id
+
+    fern_update_params = {shelf_id: shelf2.id,
+                          name: "Fernilicious",
+                          frequency: 7,
+                          preferred_contact_method: "Don't"}
+    headers = { 'CONTENT_TYPE' => 'application/json' }
+    patch api_v1_user_fern_path(user.id, fern_id), headers: headers, params: JSON.generate(fern: fern_update_params)
+
+    updated_fern = Fern.find_by(id: fern_id)
+    expect(response).to be_successful
+    expect(updated_fern.shelf_id).to eq(shelf2.id)
+    expect(updated_fern.name).to eq("Fernilicious")
+    expect(updated_fern.frequency).to eq(7)
+    expect(updated_fern.preferred_contact_method).to eq("Don't")
+
+  end
 end
