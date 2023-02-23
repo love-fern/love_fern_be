@@ -3,9 +3,10 @@ require 'rails_helper'
 RSpec.describe "ferns API endpoints" do
   it 'sends a list of all a users ferns' do
     user1 = create(:user)
-    fern1 = create(:fern, user_id: user1.id)
-    fern2 = create(:fern, user_id: user1.id)
-    fern3 = create(:fern, user_id: user1.id)
+    shelf1 = create(:shelf)
+    fern1 = create(:fern, shelf_id: shelf1.id)
+    fern2 = create(:fern, shelf_id: shelf1.id)
+    fern3 = create(:fern, shelf_id: shelf1.id)
 
     get api_v1_user_greenhouse_path(user1.id)
     expect(response).to be_successful
