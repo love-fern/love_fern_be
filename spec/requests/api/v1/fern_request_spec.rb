@@ -3,14 +3,11 @@ require 'rails_helper'
 RSpec.describe "ferns API endpoints" do
   it 'sends a list of all a users ferns' do
     user1 = create(:user)
-    # user2 = create(:user)
     fern1 = create(:fern, user_id: user1.id)
     fern2 = create(:fern, user_id: user1.id)
     fern3 = create(:fern, user_id: user1.id)
-    # fern4 = create(:fern, user_id: user2.id)
 
     get api_v1_user_greenhouse_path(user1.id)
-    # binding.pry
     expect(response).to be_successful
     ferns_hash = JSON.parse(response.body, symbolize_names: true)
     expect(ferns_hash).to have_key(:data)
@@ -39,14 +36,5 @@ RSpec.describe "ferns API endpoints" do
       expect(fern[:attributes]).to have_key(:user_id)
       expect(fern[:attributes][:user_id]).to be_a(Integer)
     end
-    # binding.pry
-    # expect()
-    # google_auth_params = {
-    #   name: "Tony Pepperoni",
-    #   email: "thebigpepperoni@gmail.com",
-    #   google_id: "iosdfh454"
-    # }
   end
-
-
 end
