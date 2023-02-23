@@ -78,7 +78,6 @@ RSpec.describe "ferns API endpoints" do
   it 'can ceate a new fern' do
     user1 = create(:user)
     shelf1 = create(:shelf, user_id: user1.id)
-    fern1 = create(:fern, shelf_id: shelf1.id)
     
     fern_params = ({
       name: 'The Big Pepperoni',
@@ -93,5 +92,8 @@ RSpec.describe "ferns API endpoints" do
 
     expect(response).to be_successful
     expect(created_fern.name).to eq("The Big Pepperoni")
+    expect(created_fern.frequency).to eq(7)
+    expect(created_fern.health).to eq(6)
+    expect(created_fern.shelf_id).to eq(shelf1.id)
   end
 end
