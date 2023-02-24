@@ -7,7 +7,7 @@ RSpec.describe "user API requests" do
         email: "nice_person@gmail.com",
         google_id: "23948sdkss"
       }
-    headers = { 'CONTENT_TYPE' => 'application/json' }
+    headers = { 'CONTENT_TYPE' => 'application/json', "FErn_key" => ENV["FErn_key"]} 
     post api_v1_users_path, headers: headers, params: JSON.generate(user: google_auth_params)
     created_user = User.last
 
@@ -23,7 +23,7 @@ RSpec.describe "user API requests" do
         email: "shelf_person@gmail.com",
         google_id: "23948sdkss"
       }
-    headers = { 'CONTENT_TYPE' => 'application/json' }
+    headers = { 'CONTENT_TYPE' => 'application/json', "FErn_key" => ENV["FErn_key"] }
     post api_v1_users_path, headers: headers, params: JSON.generate(user: google_auth_params)
     created_user = User.last
     expect(created_user.name).to eq("I need shelves!")
@@ -39,7 +39,7 @@ RSpec.describe "user API requests" do
     expect(user.name).to_not eq("this is my new name")
 
     name_change_params = { name: "this is my new name" }
-    headers = { 'CONTENT_TYPE' => 'application/json' }
+    headers = { 'CONTENT_TYPE' => 'application/json', "FErn_key" => ENV["FErn_key"] }
     patch api_v1_user_path(id), headers: headers, params: JSON.generate(user: name_change_params)
 
     updated_user = User.find_by(id: id)
