@@ -51,4 +51,27 @@ RSpec.describe "shelves API endpoints" do
     expect(response).to be_successful
     expect{ Shelf.find(shelf1.id) }.to raise_error(ActiveRecord::RecordNotFound)
   end
+
+  it 'can get all the shelves associated with a user' do
+    user = create(:user)
+    shelf = create(:shelf, user_id: user.id)
+    fern = create(:fern, shelf_id: shelf.id)
+    fern2 = create(:fern, shelf_id: shelf.id)
+    fern3 = create(:fern, shelf_id: shelf.id)
+    fern4 = create(:fern, shelf_id: shelf.id)
+
+    get api_v1_user_shelf_ferns_path(user.id, shelf.id)
+
+    expect(response).to be_successful
+    ferns_response = JSON.parse(response.body, symbolize_names: true)[:data]
+
+    expect(ferns_response[0][:attributes][:name]).to eq(shelf.name)
+    expect(ferns_response[0][:attributes][:ferns][0]).to be_a(Hash)
+    expect(ferns_response[0][:attributes][:ferns][0][:name]).to eq(fern.name)
+    expect(ferns_response[0][:attributes][:ferns][0][:health]).to eq(fern.health)
+    expect(ferns_response[0][:attributes][:ferns][0][:preferred_contact_method]).to eq(fern.preferred_contact_method)
+    expect(ferns_response[0][:attributes][:ferns][3][:name]).to eq(fern4.name)
+    expect(ferns_response[0][:attributes][:ferns][3][:health]).to eq(fern4.health)
+    expect(ferns_response[0][:attributes][:ferns][3][:preferred_contact_method]).to eq(fern4.preferred_contact_method)
+  end
 end

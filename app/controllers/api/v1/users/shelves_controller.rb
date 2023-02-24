@@ -12,6 +12,11 @@ class Api::V1::Users::ShelvesController < ApplicationController
     Shelf.find(params[:id]).destroy
   end
 
+  def index
+    user = User.find(params[:user_id])
+    render json: ShelfFernSerializer.new(user.shelves)
+  end
+
   private
 
   def update_params

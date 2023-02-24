@@ -30,6 +30,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 group :test do
   gem 'shoulda-matchers'
   gem 'simplecov', require: false
+  gem 'vcr'
 end
 
 group :development, :test do
@@ -40,6 +41,7 @@ group :development, :test do
   gem 'jsonapi-serializer'
   gem 'pry'
   gem 'rspec-rails'
+  gem 'webmock'
 end
 
 group :development do
