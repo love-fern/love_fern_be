@@ -136,4 +136,17 @@ RSpec.describe "ferns API endpoints" do
     expect(response).to be_successful
     expect{ Fern.find(fern.id) }.to raise_error(ActiveRecord::RecordNotFound)
   end
+
+  it 'can call the sentiment analazyer and update the health of a fern and return that new fern', :vcr do
+    user = create(:user)
+    shelf = create(:shelf, user_id: user.id)
+    fern = create(:fern, shelf_id: shelf.id)
+    message = "Hello. I am a muffin. Eat me."
+    patch api_v1_user_fern_path(user.id, fern.id), params: { message: message }
+
+    updated_fern = Fern.find_by(id: fern.id)
+    expect(updated_fern.health).to eq(fern.health - 1)
+
+
+  end
 end
