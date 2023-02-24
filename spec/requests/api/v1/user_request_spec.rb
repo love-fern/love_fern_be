@@ -58,7 +58,7 @@ RSpec.describe "user API requests" do
 
     expect(response).to be_successful
     parsed_response = JSON.parse(response.body, symbolize_names: true)
-    expect(parsed_response[:data][:attributes]).to eq(User.find_by(google_id: "4"))
+    expect(parsed_response[:data][:attributes]).to eq({email: user.email, google_id: user.google_id, name: user.name})
 
   end
 
