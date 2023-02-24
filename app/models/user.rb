@@ -1,11 +1,14 @@
 class User < ApplicationRecord
-  has_many :shelves
+  after_create :default_shelves
+
+  has_many :shelves, dependent: :destroy
   has_many :ferns, through: :shelves
 
-  def default_shelves
-    self.shelves.create(name: "Friends")
-    self.shelves.create(name: "Family")
-    self.shelves.create(name: "Romantic")
-    self.shelves.create(name: "Business")
-  end
+  private
+    def default_shelves
+      shelves.create(name: "Friends")
+      shelves.create(name: "Family")
+      shelves.create(name: "Romantic")
+      shelves.create(name: "Business")
+    end
 end
