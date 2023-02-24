@@ -1,6 +1,8 @@
 class Api::V1::UsersController < ApplicationController
   def create
-    render json: UserSerializer.new(User.create(user_params))
+    new_user = User.create(user_params)
+    new_user.default_shelves
+    render json: UserSerializer.new(new_user)
   end
 
   def update
