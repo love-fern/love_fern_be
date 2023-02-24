@@ -62,8 +62,11 @@ RSpec.describe "shelves API endpoints" do
     expect(response).to be_successful
 
     parsed_response = JSON.parse(response.body, symbolize_names: true)
+
+    expect(parsed_response).to have_key(:data)
+    expect(parsed_response[:data]).to be_a(Array)
+    
     shelves_response = parsed_response[:data]
-    ferns_response = parsed_response[:included]
 
     expected_shelf_names = ['Friends', 'Family', 'Romantic', 'Business', shelf.name]
 
@@ -101,14 +104,34 @@ RSpec.describe "shelves API endpoints" do
       end
     end
 
-    binding.pry
+    ferns_response = parsed_response[:included]
 
-    expect(ferns_response[0][:attributes][:ferns][0]).to be_a(Hash)
-    expect(ferns_response[0][:attributes][:ferns][0][:name]).to eq(fern.name)
-    expect(ferns_response[0][:attributes][:ferns][0][:health]).to eq(fern.health)
-    expect(ferns_response[0][:attributes][:ferns][0][:preferred_contact_method]).to eq(fern.preferred_contact_method)
-    expect(ferns_response[0][:attributes][:ferns][3][:name]).to eq(fern4.name)
-    expect(ferns_response[0][:attributes][:ferns][3][:health]).to eq(fern4.health)
-    expect(ferns_response[0][:attributes][:ferns][3][:preferred_contact_method]).to eq(fern4.preferred_contact_method)
+    expect(ferns_response).to be_an(Array)
+
+    ferns_response.each_with_index do |fern, i|
+      expect(fern).to have_key(:id)
+      expect(fern[:id]).to eq(ferns[i].id.to_s)
+
+      expect(fern).to have_key(:type)
+      expect(fern[:type]).to eq("fern")
+
+      expect(fern).to have_key(:attributes)
+
+      expect(fern[:attributes]).to have_key(:name)
+      expect(fern[:attributes][:name]).to eq(ferns[i].name)
+
+      expect(fern[:attributes]).to have_key(:health)
+      expect(fern[:attributes][:health]).to eq(ferns[i].health)
+
+      expect(fern[:attributes]).to have_key(:preferred_contact_method)
+      expect(fern[:attributes][:preferred_contact_method]).to eq(ferns[i].preferred_contact_method)
+
+      expect(fern).to have_key(:relationships)
+
+      expect(fern[:relationships]).to have_key(:shelf)
+      expect(fern[:relationships][:shelf][:data]).to be_a(Hash)
+      expect(fern[:relationships][:shelf][:data][:id]).to eq(shelf.id.to_s)
+      expect(fern[:relationships][:shelf][:data][:type]).to eq("shelf")
+    end
   end
 end
