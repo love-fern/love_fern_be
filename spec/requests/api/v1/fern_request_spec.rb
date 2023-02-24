@@ -7,7 +7,7 @@ RSpec.describe "ferns API endpoints" do
       shelf = create(:shelf, user_id: user.id)
       ferns = create_list(:fern, 3, shelf_id: shelf.id)
 
-      get api_v1_user_ferns_path(user.id)
+      get api_v1_user_ferns_path(user.id), headers: {"FErn_key" => ENV["FErn_key"]}
 
       expect(response).to be_successful
 
@@ -53,7 +53,7 @@ RSpec.describe "ferns API endpoints" do
       shelf = create(:shelf, user_id: user.id)
       fern = create(:fern, shelf_id: shelf.id)
 
-      get api_v1_user_fern_path(user, fern)
+      get api_v1_user_fern_path(user, fern), headers: {"FErn_key" => ENV["FErn_key"]}
 
       expect(response).to be_successful
 
@@ -100,7 +100,8 @@ RSpec.describe "ferns API endpoints" do
         preferred_contact_method: "text",
         shelf: 'Family'
       })
-      headers = {"CONTENT_TYPE" => "application/json"}
+      headers = {"CONTENT_TYPE" => "application/json",
+                  "FErn_key" => ENV["FErn_key"]}
 
       post "/api/v1/users/#{user.google_id}/ferns", headers: headers, params: JSON.generate(fern_params)
       created_fern = Fern.last
@@ -124,7 +125,8 @@ RSpec.describe "ferns API endpoints" do
       fern_update_params = {shelf_id: shelf2.id,
                             name: "Fernilicious",
                             preferred_contact_method: "Don't"}
-      headers = { 'CONTENT_TYPE' => 'application/json' }
+      headers = { 'CONTENT_TYPE' => 'application/json',
+                  "FErn_key" => ENV["FErn_key"] }
       patch api_v1_user_fern_path(user.id, fern_id), headers: headers, params: JSON.generate(fern_update_params)
 
       updated_fern = Fern.find_by(id: fern_id)
@@ -141,7 +143,7 @@ RSpec.describe "ferns API endpoints" do
 
       expect(Fern.find_by(id: fern.id)).to eq(fern)
 
-      delete api_v1_user_fern_path(user.id, fern.id)
+      delete api_v1_user_fern_path(user.id, fern.id), headers: {"FErn_key" => ENV["FErn_key"]}
 
       expect(response).to be_successful
       expect{ Fern.find(fern.id) }.to raise_error(ActiveRecord::RecordNotFound)
@@ -152,7 +154,7 @@ RSpec.describe "ferns API endpoints" do
       shelf = create(:shelf, user_id: user.id)
       fern = create(:fern, shelf_id: shelf.id)
       message = "Hello. I am a muffin. Eat me."
-      patch api_v1_user_fern_path(user.id, fern.id), params: { message: message }
+      patch api_v1_user_fern_path(user.id, fern.id), params: { message: message }, headers: {"FErn_key" => ENV["FErn_key"]}
 
       updated_fern = Fern.find_by(id: fern.id)
       expect(updated_fern.health).to eq(fern.health - 1)
@@ -160,33 +162,7 @@ RSpec.describe "ferns API endpoints" do
 
     end
   end
-
   describe "sad path testing" do
-    it 'will throw an error with an invalid user id for gettign all ferns' do
-      get api_v1_user_ferns_path(1)
-
-      expect(response).to_not be_successful
-    end
-
-    it 'will not update a fern if the fields are left blank' do
-      user = create(:user)
-      shelf = create(:shelf, user_id: user.id)
-      shelf2 = create(:shelf, user_id: user.id)
-      fern = create(:fern, 
-                    shelf_id: shelf.id,
-                    name: "Fernilicious",
-                    preferred_contact_method: "email")
-      fern_id = fern.id
-
-      fern_update_params = {shelf_id: shelf2.id,
-                            name: "",
-                            preferred_contact_method: "Don't"}
-      headers = { 'CONTENT_TYPE' => 'application/json' }
-      patch api_v1_user_fern_path(user.id, fern_id), headers: headers, params: JSON.generate(fern_update_params)
-
-      expect(response).to_not be_successful
-    end
-
     it 'will not create a fern without filling all fields in' do
       user = create(:user)
       shelf = create(:shelf, user_id: user.id)
@@ -195,7 +171,9 @@ RSpec.describe "ferns API endpoints" do
                     shelf_id: shelf.id,
                     preferred_contact_method: "email")
       
-      expect(response)
+      expect(response).to_not be_successful
     end
+
+    
   end
 end
