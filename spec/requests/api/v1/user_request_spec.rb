@@ -27,7 +27,7 @@ RSpec.describe "user API requests" do
     post api_v1_users_path, headers: headers, params: JSON.generate(user: google_auth_params)
     created_user = User.last
     expect(created_user.name).to eq("I need shelves!")
-    expect(created_user.shelves[0].name).to eq("Friend")
+    expect(created_user.shelves[0].name).to eq("Friends")
     expect(created_user.shelves[1].name).to eq("Family")
     expect(created_user.shelves[2].name).to eq("Romantic")
     expect(created_user.shelves[3].name).to eq("Business")
