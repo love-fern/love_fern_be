@@ -76,6 +76,7 @@ Love Fern was germinated to satisfy the requirements for a Turing Backend Mod 3 
 - dlayton66@gmail.com
 - [GitHub](https://github.com/dlayton66)
 - [LinkedIn](https://www.linkedin.com/in/drew-layton-6009a4153/)
+
 :bust_in_silhouette: **Anthony Ongaro** 
 - aongaro@gmail.com
 - [GitHub](https://github.com/ajongaro)
