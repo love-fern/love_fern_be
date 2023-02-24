@@ -2,100 +2,113 @@ require 'rails_helper'
 
 RSpec.describe "ferns API endpoints" do
   it 'sends a list of all a users ferns' do
-    user1 = create(:user)
-    shelf1 = create(:shelf, user_id: user1.id)
-    fern1 = create(:fern, shelf_id: shelf1.id, preferred_contact_method: "text")
-    fern2 = create(:fern, shelf_id: shelf1.id, preferred_contact_method: "text")
-    fern3 = create(:fern, shelf_id: shelf1.id, preferred_contact_method: "text")
+    user = create(:user)
+    shelf = create(:shelf, user_id: user.id)
+    ferns = create_list(:fern, 3, shelf_id: shelf.id)
 
-    get api_v1_user_ferns_path(user1.id)
+    get api_v1_user_ferns_path(user.id)
+
     expect(response).to be_successful
-    ferns_hash = JSON.parse(response.body, symbolize_names: true)
-    expect(ferns_hash).to have_key(:data)
-    expect(ferns_hash[:data]).to be_a(Array)
-    fern_data = ferns_hash[:data]
 
-    fern_data.each do |fern|
+    parsed_response = JSON.parse(response.body, symbolize_names: true)
+
+    expect(parsed_response).to have_key(:data)
+    expect(parsed_response[:data]).to be_a(Array)
+
+    ferns_response = parsed_response[:data]
+
+    ferns_response.each_with_index do |fern, i|
       expect(fern).to have_key(:id)
       expect(fern[:id]).to be_a(String)
+      expect(fern[:id]).to eq(ferns[i].id.to_s)
 
       expect(fern).to have_key(:type)
       expect(fern[:type]).to be_a(String)
+      expect(fern[:type]).to eq("fern")
 
       expect(fern[:attributes]).to have_key(:name)
       expect(fern[:attributes][:name]).to be_a(String)
-
-      expect(fern[:attributes]).to have_key(:frequency)
-      expect(fern[:attributes][:frequency]).to be_a(Integer)
+      expect(fern[:attributes][:name]).to eq(ferns[i].name)
 
       expect(fern[:attributes]).to have_key(:health)
       expect(fern[:attributes][:health]).to be_a(Integer)
+      expect(fern[:attributes][:health]).to eq(ferns[i].health)
 
-      expect(fern[:attributes]).to have_key(:shelf_id)
-      expect(fern[:attributes][:shelf_id]).to be_a(Integer)
+      expect(fern[:attributes]).to have_key(:preferred_contact_method)
+      expect(fern[:attributes][:preferred_contact_method]).to be_a(String)
+      expect(fern[:attributes][:preferred_contact_method]).to eq(ferns[i].preferred_contact_method)
+
+      expect(fern).to have_key(:relationships)
+
+      expect(fern[:relationships]).to have_key(:shelf)
+      expect(fern[:relationships][:shelf][:data]).to be_a(Hash)
+      expect(fern[:relationships][:shelf][:data][:id]).to eq(shelf.id.to_s)
+      expect(fern[:relationships][:shelf][:data][:type]).to eq("shelf")
     end
   end
 
   it 'can send the information of a single fern' do
-    user1 = create(:user)
-    shelf1 = create(:shelf, user_id: user1.id)
-    fern1 = create(:fern, shelf_id: shelf1.id, preferred_contact_method: "text")
-    fern2 = create(:fern, shelf_id: shelf1.id, preferred_contact_method: "text")
-    fern3 = create(:fern, shelf_id: shelf1.id, preferred_contact_method: "text")
+    user = create(:user)
+    shelf = create(:shelf, user_id: user.id)
+    fern = create(:fern, shelf_id: shelf.id)
 
-    get api_v1_user_fern_path(user1, fern1)
+    get api_v1_user_fern_path(user, fern)
 
     expect(response).to be_successful
 
-    fern_hash = JSON.parse(response.body, symbolize_names: true)
-    expect(fern_hash).to have_key(:data)
-    expect(fern_hash[:data]).to be_a(Hash)
+    parsed_response = JSON.parse(response.body, symbolize_names: true)
 
-    fern_data = fern_hash[:data]
+    expect(parsed_response).to have_key(:data)
+    expect(parsed_response[:data]).to be_a(Hash)
 
-    expect(fern_data).to have_key(:id)
-    expect(fern_data[:id]).to be_a(String)
-    
-    expect(fern_data).to have_key(:type)
-    expect(fern_data[:type]).to be_a(String)
+    fern_response = parsed_response[:data]
 
-    expect(fern_data).to have_key(:attributes)
-    expect(fern_data[:attributes]).to be_a(Hash)
+    expect(fern_response).to have_key(:id)
+    expect(fern_response[:id]).to be_a(String)
+    expect(fern_response[:id]).to eq(fern.id.to_s)
 
-    expect(fern_data[:attributes]).to have_key(:name)
-    expect(fern_data[:attributes][:name]).to be_a(String)
+    expect(fern_response).to have_key(:type)
+    expect(fern_response[:type]).to be_a(String)
+    expect(fern_response[:type]).to eq("fern")
 
-    expect(fern_data[:attributes]).to have_key(:frequency)
-    expect(fern_data[:attributes][:frequency]).to be_a(Integer)
+    expect(fern_response[:attributes]).to have_key(:name)
+    expect(fern_response[:attributes][:name]).to be_a(String)
+    expect(fern_response[:attributes][:name]).to eq(fern.name)
 
-    expect(fern_data[:attributes]).to have_key(:health)
-    expect(fern_data[:attributes][:health]).to be_a(Integer)
+    expect(fern_response[:attributes]).to have_key(:health)
+    expect(fern_response[:attributes][:health]).to be_a(Integer)
+    expect(fern_response[:attributes][:health]).to eq(fern.health)
 
-    expect(fern_data[:attributes]).to have_key(:shelf_id)
-    expect(fern_data[:attributes][:shelf_id]).to be_a(Integer)
+    expect(fern_response[:attributes]).to have_key(:preferred_contact_method)
+    expect(fern_response[:attributes][:preferred_contact_method]).to be_a(String)
+    expect(fern_response[:attributes][:preferred_contact_method]).to eq(fern.preferred_contact_method)
+
+    expect(fern_response).to have_key(:relationships)
+
+    expect(fern_response[:relationships]).to have_key(:shelf)
+    expect(fern_response[:relationships][:shelf][:data]).to be_a(Hash)
+    expect(fern_response[:relationships][:shelf][:data][:id]).to eq(shelf.id.to_s)
+    expect(fern_response[:relationships][:shelf][:data][:type]).to eq("shelf")
   end
 
-  it 'can ceate a new fern' do
-    user1 = create(:user)
-    shelf1 = create(:shelf, user_id: user1.id)
-    
+  it 'can create a new fern' do
+    user = create(:user)
+    shelf = user.shelves.find_by(name: 'Family')
     fern_params = ({
       name: 'The Big Pepperoni',
-      frequency: 7,
-      health: 6,
       preferred_contact_method: "text",
-      shelf_id: shelf1.id
+      shelf: 'Family'
     })
     headers = {"CONTENT_TYPE" => "application/json"}
 
-    post "/api/v1/users/#{user1.id}/ferns", headers: headers, params: JSON.generate(fern: fern_params)
+    post "/api/v1/users/#{user.google_id}/ferns", headers: headers, params: JSON.generate(fern_params)
     created_fern = Fern.last
 
     expect(response).to be_successful
     expect(created_fern.name).to eq("The Big Pepperoni")
-    expect(created_fern.frequency).to eq(7)
     expect(created_fern.health).to eq(6)
-    expect(created_fern.shelf_id).to eq(shelf1.id)
+    expect(created_fern.preferred_contact_method).to eq("text")
+    expect(created_fern.shelf_id).to eq(shelf.id)
   end
 
   it 'can update an existing fern' do
@@ -103,24 +116,20 @@ RSpec.describe "ferns API endpoints" do
     shelf = create(:shelf, user_id: user.id)
     shelf2 = create(:shelf, user_id: user.id)
     fern = create(:fern, 
-                  shelf_id: shelf.id, 
-                  name: "Fergie Fern", 
-                  frequency: 3, 
+                  shelf_id: shelf.id,
                   preferred_contact_method: "email")
     fern_id = fern.id
 
     fern_update_params = {shelf_id: shelf2.id,
                           name: "Fernilicious",
-                          frequency: 7,
                           preferred_contact_method: "Don't"}
     headers = { 'CONTENT_TYPE' => 'application/json' }
-    patch api_v1_user_fern_path(user.id, fern_id), headers: headers, params: JSON.generate(fern: fern_update_params)
+    patch api_v1_user_fern_path(user.id, fern_id), headers: headers, params: JSON.generate(fern_update_params)
 
     updated_fern = Fern.find_by(id: fern_id)
     expect(response).to be_successful
     expect(updated_fern.shelf_id).to eq(shelf2.id)
     expect(updated_fern.name).to eq("Fernilicious")
-    expect(updated_fern.frequency).to eq(7)
     expect(updated_fern.preferred_contact_method).to eq("Don't")
   end
 
