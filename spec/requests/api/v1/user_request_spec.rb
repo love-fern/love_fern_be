@@ -49,6 +49,19 @@ RSpec.describe "user API requests" do
     expect(updated_user.google_id).to eq(user.google_id)
   end
 
+  it 'can find or create a new user based on google id' do
+    user = create(:user, google_id: "4")
+
+    headers = { 'CONTENT_TYPE' => 'application/json', "FErn_key" => ENV["FErn_key"] }
+    duplicate_google_id_params = {name: "Jim", google_id: "4", email: "iamjim@gmail.com"}
+    post api_v1_users_path, headers: headers, params: JSON.generate(duplicate_google_id_params)
+
+    expect(response).to be_successful
+    parsed_response = JSON.parse(response.body, symbolize_names: true)
+    expect(parsed_response[:data][:attributes]).to eq(User.find_by(google_id: "4"))
+
+  end
+
 
 
 end
