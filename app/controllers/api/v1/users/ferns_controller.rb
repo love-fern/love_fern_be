@@ -16,7 +16,14 @@ class Api::V1::Users::FernsController < ApplicationController
   end
 
   def update
-    render json: FernSerializer.new(Fern.update(update_params))
+    fern = Fern.find(params[:id])
+    if params[:message]
+      fern.message_update(SentimentFacade.message_rating(params[:message]))
+      fern.save
+      render json: FernSerializer.new(fern)
+    else
+      render json: FernSerializer.new(Fern.update(update_params))
+    end
   end
 
   def destroy
