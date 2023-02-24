@@ -67,21 +67,21 @@ Love Fern was germinated to satisfy the requirements for a Turing Backend Mod 3 
 
 ## Authors & Acknowledgments
 
-**Samuel Cox** - samc1253@gmail.com
+- Samuel Cox - samc1253@gmail.com
 - [GitHub](https://github.com/sambcox)
 - [LinkedIn](https://www.linkedin.com/in/samuel-bingham-cox/)
-**Drew Layton** - dlayton66@gmail.com
+- Drew Layton - dlayton66@gmail.com
 - [GitHub](https://github.com/dlayton66)
 - [LinkedIn](https://www.linkedin.com/in/drew-layton-6009a4153/)
-**Anthony Ongaro** - aongaro@gmail.com
+- Anthony Ongaro - aongaro@gmail.com
 - [GitHub](https://github.com/ajongaro)
 - [LinkedIn](https://www.linkedin.com/in/ajongaro/)
-**Brady Rohrig** - brady.rohrig@gmail.com
+- Brady Rohrig - brady.rohrig@gmail.com
 - [GitHub](https://github.com/BRohrig)
 - [LinkedIn](https://www.linkedin.com/in/brady-rohrig-5305a923/)
-**J Seymour** - JustJakeSeymour@gmail.com
+- J Seymour - JustJakeSeymour@gmail.com
 - [GitHub](https://github.com/JustJakeSeymour)
 - [LinkedIn](https://www.linkedin.com/in/j-seymour/)
-**Anthony Blackwell Tallent** - anthonytallent567@gmail.com
+- Anthony Blackwell Tallent - anthonytallent567@gmail.com
 - [GitHub](https://github.com/anthonytallent)
 - [LinkedIn](https://www.linkedin.com/in/anthony-blackwell-tallent-b36916255/)
