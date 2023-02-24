@@ -1,7 +1,11 @@
 class Api::V1::Users::FernsController < ApplicationController
   def index
     user = User.find_by_id(params[:user_id])
-    render json: FernSerializer.new(user.ferns)
+    if user
+      render json: FernSerializer.new(user.ferns)
+    else
+      render json: "User not found", status: 400
+    end
   end
 
   def show
@@ -21,8 +25,10 @@ class Api::V1::Users::FernsController < ApplicationController
       fern.message_update(SentimentFacade.message_rating(params[:message]))
       fern.save
       render json: FernSerializer.new(fern)
-    else
+    elsif fern.update(fern_params)
       render json: FernSerializer.new(Fern.update(update_params))
+    else
+      render json: "Fern fields must be filled in", status: 400
     end
   end
 

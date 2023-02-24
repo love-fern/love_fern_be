@@ -25,3 +25,6 @@
 coverage
 .env
 vcr
+
+# Ignore application configuration
+/config/application.yml
