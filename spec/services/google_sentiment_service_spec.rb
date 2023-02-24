@@ -1,15 +1,9 @@
 require 'rails_helper'
 
-RSpec.describe "google sentiment service" do
+RSpec.describe "google sentiment service", :vcr do
   it 'returns a response analyzing an input text' do
-    query = {
-              "document": {
-                "content": "Hello. I am a muffin. Eat me.",
-                "language": "",
-                "type": "PLAIN_TEXT"
-                          },
-              "encodingType": "UTF8"
-            }
+    query = "Hello. I am a muffin. Eat me."
+              
     sentiment_response = GoogleSentimentService.get_sentiment(query)
     expect(sentiment_response).to eq({
                         documentSentiment: {
