@@ -25,9 +25,6 @@ RSpec.describe "ferns API endpoints" do
       expect(fern[:attributes]).to have_key(:name)
       expect(fern[:attributes][:name]).to be_a(String)
 
-      expect(fern[:attributes]).to have_key(:frequency)
-      expect(fern[:attributes][:frequency]).to be_a(Integer)
-
       expect(fern[:attributes]).to have_key(:health)
       expect(fern[:attributes][:health]).to be_a(Integer)
 
@@ -65,9 +62,6 @@ RSpec.describe "ferns API endpoints" do
     expect(fern_data[:attributes]).to have_key(:name)
     expect(fern_data[:attributes][:name]).to be_a(String)
 
-    expect(fern_data[:attributes]).to have_key(:frequency)
-    expect(fern_data[:attributes][:frequency]).to be_a(Integer)
-
     expect(fern_data[:attributes]).to have_key(:health)
     expect(fern_data[:attributes][:health]).to be_a(Integer)
 
@@ -81,19 +75,17 @@ RSpec.describe "ferns API endpoints" do
     
     fern_params = ({
       name: 'The Big Pepperoni',
-      frequency: 7,
       health: 6,
       preferred_contact_method: "text",
       shelf_id: shelf1.id
     })
     headers = {"CONTENT_TYPE" => "application/json"}
 
-    post "/api/v1/users/#{user1.id}/ferns", headers: headers, params: JSON.generate(fern: fern_params)
+    post "/api/v1/users/#{user1.id}/ferns", headers: headers, params: JSON.generate(fern_params)
     created_fern = Fern.last
 
     expect(response).to be_successful
     expect(created_fern.name).to eq("The Big Pepperoni")
-    expect(created_fern.frequency).to eq(7)
     expect(created_fern.health).to eq(6)
     expect(created_fern.shelf_id).to eq(shelf1.id)
   end
@@ -103,24 +95,20 @@ RSpec.describe "ferns API endpoints" do
     shelf = create(:shelf, user_id: user.id)
     shelf2 = create(:shelf, user_id: user.id)
     fern = create(:fern, 
-                  shelf_id: shelf.id, 
-                  name: "Fergie Fern", 
-                  frequency: 3, 
+                  shelf_id: shelf.id,
                   preferred_contact_method: "email")
     fern_id = fern.id
 
     fern_update_params = {shelf_id: shelf2.id,
                           name: "Fernilicious",
-                          frequency: 7,
                           preferred_contact_method: "Don't"}
     headers = { 'CONTENT_TYPE' => 'application/json' }
-    patch api_v1_user_fern_path(user.id, fern_id), headers: headers, params: JSON.generate(fern: fern_update_params)
+    patch api_v1_user_fern_path(user.id, fern_id), headers: headers, params: JSON.generate(fern_update_params)
 
     updated_fern = Fern.find_by(id: fern_id)
     expect(response).to be_successful
     expect(updated_fern.shelf_id).to eq(shelf2.id)
     expect(updated_fern.name).to eq("Fernilicious")
-    expect(updated_fern.frequency).to eq(7)
     expect(updated_fern.preferred_contact_method).to eq("Don't")
   end
 

@@ -1,4 +1,4 @@
 class FernSerializer
   include JSONAPI::Serializer
-  attributes :name, :frequency, :health, :shelf_id
+  attributes :name, :health, :shelf_id
 end
