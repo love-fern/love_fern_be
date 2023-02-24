@@ -1,3 +1,4 @@
+gem 'dotenv-rails', groups: %i[development test]
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
@@ -42,6 +43,7 @@ group :development, :test do
   gem 'pry'
   gem 'rspec-rails'
   gem 'webmock'
+  gem 'faraday'
 end
 
 group :development do
