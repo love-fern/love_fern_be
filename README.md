@@ -87,7 +87,8 @@ Love Fern was germinated to satisfy the requirements for a Turing Backend Mod 3 
 - [GitHub](https://github.com/BRohrig)
 - [LinkedIn](https://www.linkedin.com/in/brady-rohrig-5305a923/)
 
-:bust_in_silhouette: **J Seymour** - JustJakeSeymour@gmail.com
+:bust_in_silhouette: **J Seymour** 
+- JustJakeSeymour@gmail.com
 - [GitHub](https://github.com/JustJakeSeymour)
 - [LinkedIn](https://www.linkedin.com/in/j-seymour/)
 
