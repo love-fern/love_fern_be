@@ -1,3 +1,4 @@
+gem 'dotenv-rails', groups: %i[development test]
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
@@ -27,6 +28,9 @@ gem 'bootsnap', '>= 1.1.0', require: false
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 # gem 'rack-cors'
+
+gem 'faraday'
+
 group :test do
   gem 'shoulda-matchers'
   gem 'simplecov', require: false
@@ -42,6 +46,7 @@ group :development, :test do
   gem 'pry'
   gem 'rspec-rails'
   gem 'webmock'
+  gem 'faraday'
 end
 
 group :development do

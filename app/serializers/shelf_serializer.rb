@@ -1,8 +1,6 @@
 class ShelfSerializer
   include JSONAPI::Serializer
-  attributes :user_id, :name
- 
- 
-
-
+  attributes :name
+  belongs_to :user
+  has_many :ferns
 end 

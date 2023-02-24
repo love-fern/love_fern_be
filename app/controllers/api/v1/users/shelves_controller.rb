@@ -14,7 +14,8 @@ class Api::V1::Users::ShelvesController < ApplicationController
 
   def index
     user = User.find_by_google_id(params[:user_id])
-    render json: ShelfFernSerializer.new(user.shelves)
+    options = { include: [:ferns] }
+    render json: ShelfSerializer.new(user.shelves, options)
   end
 
   private
