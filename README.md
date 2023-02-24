@@ -67,10 +67,13 @@ Love Fern was germinated to satisfy the requirements for a Turing Backend Mod 3 
 
 ## Authors & Acknowledgments
 
-- Samuel Cox - samc1253@gmail.com
+:bust_in_silhouette: **Samuel Cox** 
+- samc1253@gmail.com
 - [GitHub](https://github.com/sambcox)
 - [LinkedIn](https://www.linkedin.com/in/samuel-bingham-cox/)
-- Drew Layton - dlayton66@gmail.com
+
+:bust_in_silhouette: **Drew Layton** 
+- dlayton66@gmail.com
 - [GitHub](https://github.com/dlayton66)
 - [LinkedIn](https://www.linkedin.com/in/drew-layton-6009a4153/)
 - Anthony Ongaro - aongaro@gmail.com
