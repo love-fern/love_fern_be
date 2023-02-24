@@ -9,7 +9,9 @@ class Api::V1::Users::FernsController < ApplicationController
   end
 
   def create
-    new_fern = Fern.create(fern_params)
+    user = User.find_by(google_id: params["user_id"])
+    shelf = user.shelves.find_by(name: params["shelf"])
+    new_fern = shelf.ferns.create(fern_params)
     render json: FernSerializer.new(new_fern)
   end
 
@@ -24,10 +26,10 @@ class Api::V1::Users::FernsController < ApplicationController
   private
 
   def update_params
-    params.require(:fern).permit(:name, :frequency, :shelf_id, :preferred_contact_method)
+    params.permit(:name, :shelf_id, :preferred_contact_method)
   end
 
   def fern_params
-    params.require(:fern).permit(:name, :frequency, :health, :shelf_id, :preferred_contact_method)
+    params.permit(:name, :preferred_contact_method)
   end
 end

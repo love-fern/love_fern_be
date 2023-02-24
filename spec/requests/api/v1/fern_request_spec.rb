@@ -69,25 +69,24 @@ RSpec.describe "ferns API endpoints" do
     expect(fern_data[:attributes][:shelf_id]).to be_a(Integer)
   end
 
-  it 'can ceate a new fern' do
-    user1 = create(:user)
-    shelf1 = create(:shelf, user_id: user1.id)
-    
+  it 'can create a new fern' do
+    user = create(:user)
+    shelf = user.shelves.find_by(name: 'Family')
     fern_params = ({
       name: 'The Big Pepperoni',
-      health: 6,
       preferred_contact_method: "text",
-      shelf_id: shelf1.id
+      shelf: 'Family'
     })
     headers = {"CONTENT_TYPE" => "application/json"}
 
-    post "/api/v1/users/#{user1.id}/ferns", headers: headers, params: JSON.generate(fern_params)
+    post "/api/v1/users/#{user.google_id}/ferns", headers: headers, params: JSON.generate(fern_params)
     created_fern = Fern.last
 
     expect(response).to be_successful
     expect(created_fern.name).to eq("The Big Pepperoni")
     expect(created_fern.health).to eq(6)
-    expect(created_fern.shelf_id).to eq(shelf1.id)
+    expect(created_fern.preferred_contact_method).to eq("text")
+    expect(created_fern.shelf_id).to eq(shelf.id)
   end
 
   it 'can update an existing fern' do
