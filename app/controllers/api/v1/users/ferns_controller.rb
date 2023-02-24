@@ -20,7 +20,7 @@ class Api::V1::Users::FernsController < ApplicationController
       fern.save
       render json: FernSerializer.new(fern)
     else
-      render json: FernSerializer.new(fern.update(update_params))
+      render json: FernSerializer.new(Fern.update(update_params))
     end
   end
 
