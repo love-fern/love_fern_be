@@ -244,7 +244,6 @@ RSpec.describe "ferns API endpoints" do
 
       expect(response).to be_successful
       parsed_response = JSON.parse(response.body, symbolize_names: true)
-
       expect(parsed_response[:included]).to be_an(Array)
       expect(parsed_response[:included].count).to eq(3)
       expect(parsed_response[:included][0][:attributes][:evaluation]).to eq("Negative")
