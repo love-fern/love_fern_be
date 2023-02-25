@@ -5,10 +5,7 @@ Rails.application.routes.draw do
       resources :activities, only: [:index]
       resources :users, only: [:create, :update] do 
         resources :ferns, controller: "users/ferns"
-        resources :shelves, only: [:create, :update, :destroy], controller: "users/shelves" do
-          resources :ferns, only: [:index], controller: "users/shelves"
-        end
-
+        resources :shelves, only: [:index, :create, :update, :destroy], controller: "users/shelves"
       end
     end
   end
