@@ -162,18 +162,29 @@ RSpec.describe "ferns API endpoints" do
 
     end
   end
+
   describe "sad path testing" do
-    it 'will not create a fern without filling all fields in' do
+    it 'will not update a fern without filling all fields in' do
       user = create(:user)
       shelf = create(:shelf, user_id: user.id)
       shelf2 = create(:shelf, user_id: user.id)
       fern = create(:fern, 
                     shelf_id: shelf.id,
+                    name: "Fernilicious",
                     preferred_contact_method: "email")
-      
+
+      fern_update_params = {shelf_id: shelf2.id,
+                            name: "",
+                            preferred_contact_method: "Don't"}
+
+      headers = { 'CONTENT_TYPE' => 'application/json',
+        "FErn_key" => ENV["FErn_key"] }
+
+      fern_id = fern.id
+      patch api_v1_user_fern_path(user.id, fern_id), headers: headers, params: JSON.generate(fern_update_params)
+      updated_fern = Fern.find_by(id: fern_id)
+
       expect(response).to_not be_successful
     end
-
-    
   end
 end

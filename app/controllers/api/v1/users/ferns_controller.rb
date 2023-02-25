@@ -28,7 +28,7 @@ class Api::V1::Users::FernsController < ApplicationController
     elsif fern.update(fern_params)
       render json: FernSerializer.new(Fern.update(update_params))
     else
-      render json: "Fern fields must be filled in", status: 400
+      render json: { "errors": {"status": "400", "details": "Bad Request"}}, status: 400
     end
   end
 
