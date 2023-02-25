@@ -1,11 +1,20 @@
 class Api::V1::Users::ShelvesController < ApplicationController
   def create
-    new_shelf = Shelf.create(shelf_params)
-    render json: ShelfSerializer.new(new_shelf)
+    new_shelf = Shelf.new(shelf_params)
+    if new_shelf.save
+      render json: ShelfSerializer.new(new_shelf)
+    else
+      render json: { "errors": {"status": "400", "details": "Bad Request"}}, status: 404
+    end
   end
 
   def update
-    render json: ShelfSerializer.new(Shelf.update(update_params))
+    shelf = Shelf.find(params[:id])
+    if shelf.update(update_params)
+      render json: ShelfSerializer.new(Shelf.update(update_params))
+    else
+      render json: { "errors": {"status": "400", "details": "Bad Request"}}, status: 404
+    end
   end
 
   def destroy
