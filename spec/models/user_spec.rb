@@ -5,6 +5,12 @@ RSpec.describe User, type: :model do
     it { should have_many(:ferns) }
   end
 
+  describe "validations" do
+    it {should validate_presence_of :name}
+    it {should validate_presence_of :email}
+    it {should validate_presence_of :google_id}
+  end
+
   describe 'callbacks' do
     it 'generates default shelves after user creation' do
       user = create(:user)
