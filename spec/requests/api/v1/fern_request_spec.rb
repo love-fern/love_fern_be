@@ -219,11 +219,37 @@ RSpec.describe "ferns API endpoints" do
       expect(response).to be_successful
 
       parsed_response = JSON.parse(response.body, symbolize_names: true)
-      expect(parsed_response[:data]).to be_an(Array)
-      expect(parsed_response[:relationships]).to have_key(:shelf)
-      expect(parsed_response[:relationships][:shelf][:data][:id]).to eq(shelf.id.to_s)
       
+      expect(parsed_response[:data]).to be_a(Hash)
+      expect(parsed_response[:data][:relationships]).to have_key(:shelf)
+      expect(parsed_response[:data][:relationships][:shelf][:data][:id]).to eq(shelf.id.to_s)
+      expect(parsed_response[:data][:relationships][:interactions][:data]).to be_an(Array)
+      expect(parsed_response[:data][:relationships][:interactions][:data].count).to eq(3)
+      expect(parsed_response[:data][:relationships][:interactions][:data][0][:id]).to eq(interaction3.id.to_s)
+      expect(parsed_response[:data][:relationships][:interactions][:data][1][:id]).to eq(interaction.id.to_s)
+      expect(parsed_response[:data][:relationships][:interactions][:data][2][:id]).to eq(interaction2.id.to_s)
+    end
 
+    it 'can create a new interaction and store it after calling google sentiment' do
+      user = create(:user)
+      shelf = create(:shelf, user_id: user.id)
+      fern = create(:fern, shelf_id: shelf.id)
+      interaction = create(:interaction, fern_id: fern.id, created_at: Time.now - 1.days)
+      interaction2 = create(:interaction, fern_id: fern.id, created_at: Time.now - 2.days)
+
+      message = "Hello. I am a muffin. Eat me."
+      patch api_v1_user_fern_path(user.id, fern.id), params: { message: message }, headers: {"HTTP_FERN_KEY" => ENV["FErn_key"]}
+
+      get api_v1_user_fern_path(user, fern), headers: {"HTTP_FERN_KEY" => ENV["FErn_key"]}
+
+      expect(response).to be_successful
+      parsed_response = JSON.parse(response.body, symbolize_names: true)
+
+      expect(parsed_response[:data][:relationships][:interactions][:data]).to be_an(Array)
+      expect(parsed_response[:data][:relationships][:interactions][:data].count).to eq(3)
+      expect(parsed_response[:data][:relationships][:interactions][:data][0][:evaluation]).to eq("Negative")
+      expect(parsed_response[:data][:relationships][:interactions][:data][1][:id]).to eq(interaction.id.to_s)
+      expect(parsed_response[:data][:relationships][:interactions][:data][2][:id]).to eq(interaction2.id.to_s)
     end
 
 
