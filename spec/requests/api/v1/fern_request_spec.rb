@@ -7,7 +7,7 @@ RSpec.describe "ferns API endpoints" do
       shelf = create(:shelf, user_id: user.id)
       ferns = create_list(:fern, 3, shelf_id: shelf.id)
 
-      get api_v1_user_ferns_path(user.id), headers: {"FErn_key" => ENV["FErn_key"]}
+      get api_v1_user_ferns_path(user.id), headers: {"HTTP_FERN_KEY" => ENV["FErn_key"]}
 
       expect(response).to be_successful
 
@@ -53,7 +53,7 @@ RSpec.describe "ferns API endpoints" do
       shelf = create(:shelf, user_id: user.id)
       fern = create(:fern, shelf_id: shelf.id)
 
-      get api_v1_user_fern_path(user, fern), headers: {"FErn_key" => ENV["FErn_key"]}
+      get api_v1_user_fern_path(user, fern), headers: {"HTTP_FERN_KEY" => ENV["FErn_key"]}
 
       expect(response).to be_successful
 
@@ -101,7 +101,7 @@ RSpec.describe "ferns API endpoints" do
         shelf: 'Family'
       })
       headers = {"CONTENT_TYPE" => "application/json",
-        "FErn_key" => ENV["FErn_key"]}
+        "HTTP_FERN_KEY" => ENV["FErn_key"]}
 
       post "/api/v1/users/#{user.google_id}/ferns", headers: headers, params: JSON.generate(fern_params)
       created_fern = Fern.last
@@ -126,7 +126,7 @@ RSpec.describe "ferns API endpoints" do
                             name: "Fernilicious",
                             preferred_contact_method: "Don't"}
       headers = { 'CONTENT_TYPE' => 'application/json',
-        "FErn_key" => ENV["FErn_key"] }
+        "HTTP_FERN_KEY" => ENV["FErn_key"] }
       patch api_v1_user_fern_path(user.id, fern_id), headers: headers, params: JSON.generate(fern_update_params)
 
       updated_fern = Fern.find_by(id: fern_id)
@@ -143,7 +143,7 @@ RSpec.describe "ferns API endpoints" do
 
       expect(Fern.find_by(id: fern.id)).to eq(fern)
 
-      delete api_v1_user_fern_path(user.id, fern.id), headers: {"FErn_key" => ENV["FErn_key"]}
+      delete api_v1_user_fern_path(user.id, fern.id), headers: {"HTTP_FERN_KEY" => ENV["FErn_key"]}
 
       expect(response).to be_successful
       expect{ Fern.find(fern.id) }.to raise_error(ActiveRecord::RecordNotFound)
@@ -154,7 +154,7 @@ RSpec.describe "ferns API endpoints" do
       shelf = create(:shelf, user_id: user.id)
       fern = create(:fern, shelf_id: shelf.id)
       message = "Hello. I am a muffin. Eat me."
-      patch api_v1_user_fern_path(user.id, fern.id), params: { message: message }, headers: {"FErn_key" => ENV["FErn_key"]}
+      patch api_v1_user_fern_path(user.id, fern.id), params: { message: message }, headers: {"HTTP_FERN_KEY" => ENV["FErn_key"]}
 
       updated_fern = Fern.find_by(id: fern.id)
       expect(updated_fern.health).to eq(fern.health - 1)
@@ -178,7 +178,7 @@ RSpec.describe "ferns API endpoints" do
                             preferred_contact_method: "Don't"}
 
       headers = { 'CONTENT_TYPE' => 'application/json',
-        "FErn_key" => ENV["FErn_key"] }
+        "HTTP_FERN_KEY" => ENV["FErn_key"] }
 
       fern_id = fern.id
       patch api_v1_user_fern_path(user.id, fern_id), headers: headers, params: JSON.generate(fern_update_params)
@@ -197,7 +197,7 @@ RSpec.describe "ferns API endpoints" do
       })
 
       headers = {"CONTENT_TYPE" => "application/json",
-        "FErn_key" => ENV["FErn_key"]}
+        "HTTP_FERN_KEY" => ENV["FErn_key"]}
 
       post "/api/v1/users/#{user.google_id}/ferns", headers: headers, params: JSON.generate(fern_params)
 
