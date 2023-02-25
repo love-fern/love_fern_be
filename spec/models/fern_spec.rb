@@ -10,7 +10,7 @@ RSpec.describe Fern do
     shelf = create(:shelf, user_id: user.id)
 
     @fern = create(:fern, shelf_id: shelf.id)
-    expect(@fern.health).to eq(6)
+    expect(@fern.health).to eq(7)
   end
 
   it 'has a method to update the ferns health based on an input rating' do
@@ -18,11 +18,11 @@ RSpec.describe Fern do
     shelf = create(:shelf, user_id: user.id)
     fern = create(:fern, shelf_id: shelf.id)
     
-    expect(fern.health).to eq(6)
+    expect(fern.health).to eq(7)
     fern.message_update(-2)
-    expect(fern.health).to eq(5)
-    fern.message_update(+0.1)
     expect(fern.health).to eq(6)
+    fern.message_update(+0.1)
+    expect(fern.health).to eq(7)
   end
 
   it 'has a method to update ferns health that will not go below 0' do
