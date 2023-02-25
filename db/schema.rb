@@ -10,14 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_02_24_174931) do
+ActiveRecord::Schema.define(version: 2023_02_24_235943) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "ferns", force: :cascade do |t|
     t.string "name"
-    t.integer "health", default: 6
+    t.integer "health", default: 7
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "preferred_contact_method"

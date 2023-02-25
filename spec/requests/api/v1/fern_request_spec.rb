@@ -107,7 +107,7 @@ RSpec.describe "ferns API endpoints" do
 
     expect(response).to be_successful
     expect(created_fern.name).to eq("The Big Pepperoni")
-    expect(created_fern.health).to eq(6)
+    expect(created_fern.health).to eq(7)
     expect(created_fern.preferred_contact_method).to eq("text")
     expect(created_fern.shelf_id).to eq(shelf.id)
   end
