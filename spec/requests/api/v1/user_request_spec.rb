@@ -8,7 +8,7 @@ RSpec.describe "user API requests" do
         google_id: "23948sdkss"
       }
     headers = { 'CONTENT_TYPE' => 'application/json', "FErn_key" => ENV["FErn_key"]} 
-    post api_v1_users_path, headers: headers, params: JSON.generate(user: google_auth_params)
+    post api_v1_users_path, headers: headers, params: JSON.generate(google_auth_params)
     created_user = User.last
 
     expect(response).to be_successful
@@ -24,8 +24,9 @@ RSpec.describe "user API requests" do
         google_id: "23948sdkss"
       }
     headers = { 'CONTENT_TYPE' => 'application/json', "FErn_key" => ENV["FErn_key"] }
-    post api_v1_users_path, headers: headers, params: JSON.generate(user: google_auth_params)
+    post api_v1_users_path, headers: headers, params: JSON.generate(google_auth_params)
     created_user = User.last
+
     expect(created_user.name).to eq("I need shelves!")
     expect(created_user.shelves[0].name).to eq("Friends")
     expect(created_user.shelves[1].name).to eq("Family")
