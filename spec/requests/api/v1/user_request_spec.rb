@@ -73,6 +73,17 @@ RSpec.describe "user API requests" do
 
       expect(response).to_not be_successful
     end
+
+    it 'returns an unauthorized status if no api key is input' do
+      user = create(:user)
+      id = user.id
+      name_change_params = { name: "" }
+      headers = { 'CONTENT_TYPE' => 'application/json'}
+      patch api_v1_user_path(id), headers: headers, params: JSON.generate(user: name_change_params)
+
+      expect(response.status).to eq(403)
+
+    end
   end
 
 
