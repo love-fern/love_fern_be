@@ -204,4 +204,28 @@ RSpec.describe "ferns API endpoints" do
       expect(response).to_not be_successful
     end
   end
+
+  describe 'interactions' do
+    it 'can return the three most recent interactions with their information' do
+      user = create(:user)
+      shelf = create(:shelf, user_id: user.id)
+      fern = create(:fern, shelf_id: shelf.id)
+      interaction = create(:interaction, fern_id: fern.id, created_at: Time.now - 1.days)
+      interaction2 = create(:interaction, fern_id: fern.id, created_at: Time.now - 2.days)
+      interaction3 = create(:interaction, fern_id: fern.id)
+      interaction4 = create(:interaction, fern_id: fern.id, created_at: Time.now - 3.days)
+
+      get api_v1_user_fern_path(user, fern), headers: {"HTTP_FERN_KEY" => ENV["FErn_key"]}
+      expect(response).to be_successful
+
+      parsed_response = JSON.parse(response.body, symbolize_names: true)
+      expect(parsed_response[:data]).to be_an(Array)
+      expect(parsed_response[:relationships]).to have_key(:shelf)
+      expect(parsed_response[:relationships][:shelf][:data][:id]).to eq(shelf.id.to_s)
+      
+
+    end
+
+
+  end
 end
