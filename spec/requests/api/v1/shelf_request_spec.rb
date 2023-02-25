@@ -57,7 +57,7 @@ RSpec.describe "shelves API endpoints" do
     shelf = create(:shelf, user_id: user.id)
     ferns = create_list(:fern, 4, shelf_id: shelf.id)
 
-    get api_v1_user_shelf_ferns_path(user.id, shelf.id), headers: {"FErn_key" => ENV["FErn_key"]}
+    get api_v1_user_shelves_path(user.google_id, shelf.id), headers: {"FErn_key" => ENV["FErn_key"]}
 
     expect(response).to be_successful
 
