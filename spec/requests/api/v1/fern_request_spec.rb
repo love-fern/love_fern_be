@@ -230,7 +230,7 @@ RSpec.describe "ferns API endpoints" do
       expect(parsed_response[:data][:relationships][:interactions][:data][2][:id]).to eq(interaction2.id.to_s)
     end
 
-    it 'can create a new interaction and store it after calling google sentiment' do
+    it 'can create a new interaction and store it after calling google sentiment', :vcr do
       user = create(:user)
       shelf = create(:shelf, user_id: user.id)
       fern = create(:fern, shelf_id: shelf.id)
@@ -245,11 +245,11 @@ RSpec.describe "ferns API endpoints" do
       expect(response).to be_successful
       parsed_response = JSON.parse(response.body, symbolize_names: true)
 
-      expect(parsed_response[:data][:relationships][:interactions][:data]).to be_an(Array)
-      expect(parsed_response[:data][:relationships][:interactions][:data].count).to eq(3)
-      expect(parsed_response[:data][:relationships][:interactions][:data][0][:evaluation]).to eq("Negative")
-      expect(parsed_response[:data][:relationships][:interactions][:data][1][:id]).to eq(interaction.id.to_s)
-      expect(parsed_response[:data][:relationships][:interactions][:data][2][:id]).to eq(interaction2.id.to_s)
+      expect(parsed_response[:included]).to be_an(Array)
+      expect(parsed_response[:included].count).to eq(3)
+      expect(parsed_response[:included][0][:attributes][:evaluation]).to eq("Negative")
+      expect(parsed_response[:included][1][:id]).to eq(interaction.id.to_s)
+      expect(parsed_response[:included][2][:id]).to eq(interaction2.id.to_s)
     end
 
 

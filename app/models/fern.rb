@@ -7,8 +7,10 @@ class Fern < ApplicationRecord
   def message_update(rating)
     if rating > 0
       self.health += 1 if self.health < 10
+      self.interactions.create(evaluation: "Positive")
     elsif rating < 0 
       self.health -= 1 if self.health > 0
+      self.interactions.create(evaluation: "Negative")
     end
   end
 end
