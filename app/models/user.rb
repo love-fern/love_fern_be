@@ -4,6 +4,8 @@ class User < ApplicationRecord
   has_many :shelves, dependent: :destroy
   has_many :ferns, through: :shelves
 
+  validates_presence_of :name, :email, :google_id
+
   private
     def default_shelves
       shelves.create(name: "Friends")

@@ -63,6 +63,18 @@ RSpec.describe "user API requests" do
 
   end
 
+  describe 'sad paths' do
+    it "will not update a user if the name is left blank" do
+      user = create(:user)
+      id = user.id
+      name_change_params = { name: "" }
+      headers = { 'CONTENT_TYPE' => 'application/json', "FErn_key" => ENV["FErn_key"] }
+      patch api_v1_user_path(id), headers: headers, params: JSON.generate(user: name_change_params)
+
+      expect(response).to_not be_successful
+    end
+  end
+
 
 
 end

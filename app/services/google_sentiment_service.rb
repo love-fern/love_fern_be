@@ -1,6 +1,5 @@
 class GoogleSentimentService
   def self.get_sentiment(message)
-    # binding.pry
     request = conn.post("/v1/documents:analyzeSentiment", self.google_query_format(message))
      
     JSON.parse(request.body, symbolize_names: true)

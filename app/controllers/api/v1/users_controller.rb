@@ -9,7 +9,12 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def update
-    render json: UserSerializer.new(User.update(name_param))
+    user = User.find_by_id(params[:id])
+    if user.update(name_param)
+      render json: UserSerializer.new(User.update(name_param))
+    else
+      render json: { "errors": {"status": "400", "details": "Bad Request"}}, status: 404
+    end
   end
 
   private

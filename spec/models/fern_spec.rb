@@ -5,6 +5,13 @@ RSpec.describe Fern do
     it { should belong_to(:shelf) }
   end
 
+  describe "validations" do
+    it {should validate_presence_of :name}
+    it {should validate_presence_of :health}
+    it {should validate_presence_of :preferred_contact_method}
+    it {should validate_presence_of :shelf_id}
+  end
+
   it 'should have a default health of 6' do
     user = create(:user)
     shelf = create(:shelf, user_id: user.id)
