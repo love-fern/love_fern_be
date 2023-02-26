@@ -1,4 +1,4 @@
-class Errors
+class ErrorsController
 
   def self.bad_request
     format_error(404, "Bad Request")

@@ -4,7 +4,7 @@ class Api::V1::Users::ShelvesController < ApplicationController
     if new_shelf.save
       render json: ShelfSerializer.new(new_shelf)
     else
-      render json: ::Errors.bad_request, status: 404
+      render json: ::ErrorsController.bad_request, status: 404
     end
   end
 
@@ -13,7 +13,7 @@ class Api::V1::Users::ShelvesController < ApplicationController
     if shelf.update(update_params)
       render json: ShelfSerializer.new(Shelf.update(update_params))
     else
-      render json: ::Errors.bad_request, status: 404
+      render json: ::ErrorsController.bad_request, status: 404
     end
   end
 
