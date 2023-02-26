@@ -185,6 +185,16 @@ RSpec.describe "ferns API endpoints" do
       updated_fern = Fern.find_by(id: fern_id)
 
       expect(response).to_not be_successful
+      parsed_response = JSON.parse(response.body, symbolize_names: true)
+
+      expect(parsed_response).to have_key(:error)
+      expect(parsed_response[:error]).to be_a(Hash)
+
+      expect(parsed_response[:error]).to have_key(:code)
+      expect(parsed_response[:error][:code]).to be_a(Integer)
+
+      expect(parsed_response[:error]).to have_key(:message)
+      expect(parsed_response[:error][:message]).to be_a(String)
     end
 
     it "will not create a fern if a field is left blank" do
@@ -202,6 +212,16 @@ RSpec.describe "ferns API endpoints" do
       post "/api/v1/users/#{user.google_id}/ferns", headers: headers, params: JSON.generate(fern_params)
 
       expect(response).to_not be_successful
+      parsed_response = JSON.parse(response.body, symbolize_names: true)
+
+      expect(parsed_response).to have_key(:error)
+      expect(parsed_response[:error]).to be_a(Hash)
+
+      expect(parsed_response[:error]).to have_key(:code)
+      expect(parsed_response[:error][:code]).to be_a(Integer)
+
+      expect(parsed_response[:error]).to have_key(:message)
+      expect(parsed_response[:error][:message]).to be_a(String)
     end
   end
 
@@ -250,7 +270,5 @@ RSpec.describe "ferns API endpoints" do
       expect(parsed_response[:included][1][:id]).to eq(interaction.id.to_s)
       expect(parsed_response[:included][2][:id]).to eq(interaction2.id.to_s)
     end
-
-
   end
 end

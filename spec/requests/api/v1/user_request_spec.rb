@@ -72,6 +72,16 @@ RSpec.describe "user API requests" do
       patch api_v1_user_path(id), headers: headers, params: JSON.generate(user: name_change_params)
 
       expect(response).to_not be_successful
+      parsed_response = JSON.parse(response.body, symbolize_names: true)
+
+      expect(parsed_response).to have_key(:error)
+      expect(parsed_response[:error]).to be_a(Hash)
+
+      expect(parsed_response[:error]).to have_key(:code)
+      expect(parsed_response[:error][:code]).to be_a(Integer)
+
+      expect(parsed_response[:error]).to have_key(:message)
+      expect(parsed_response[:error][:message]).to be_a(String)
     end
   end
 

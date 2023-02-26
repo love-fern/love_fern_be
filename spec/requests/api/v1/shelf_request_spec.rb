@@ -151,6 +151,16 @@ RSpec.describe "shelves API endpoints" do
       post api_v1_user_shelves_path(user1), headers: headers, params: JSON.generate(shelf: shelf_params)
 
       expect(response).to_not be_successful
+      parsed_response = JSON.parse(response.body, symbolize_names: true)
+
+      expect(parsed_response).to have_key(:error)
+      expect(parsed_response[:error]).to be_a(Hash)
+
+      expect(parsed_response[:error]).to have_key(:code)
+      expect(parsed_response[:error][:code]).to be_a(Integer)
+
+      expect(parsed_response[:error]).to have_key(:message)
+      expect(parsed_response[:error][:message]).to be_a(String)
     end
 
     it 'will not update a shelf if any fields are left blank' do
@@ -170,6 +180,16 @@ RSpec.describe "shelves API endpoints" do
       patch api_v1_user_shelf_path(user1, shelf1), headers: headers, params: JSON.generate(shelf: shelf_params)
 
       expect(response).to_not be_successful
+      parsed_response = JSON.parse(response.body, symbolize_names: true)
+
+      expect(parsed_response).to have_key(:error)
+      expect(parsed_response[:error]).to be_a(Hash)
+
+      expect(parsed_response[:error]).to have_key(:code)
+      expect(parsed_response[:error][:code]).to be_a(Integer)
+
+      expect(parsed_response[:error]).to have_key(:message)
+      expect(parsed_response[:error][:message]).to be_a(String)
     end
   end
 end
