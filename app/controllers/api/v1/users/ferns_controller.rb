@@ -16,7 +16,7 @@ class Api::V1::Users::FernsController < ApplicationController
     if new_fern.save
       render json: FernSerializer.new(new_fern)
     else
-      render json: { "errors": {"status": "400", "details": "Bad Request"}}, status: 404
+      render json: ::Errors.bad_request, status: 404
     end
   end
 
@@ -29,7 +29,7 @@ class Api::V1::Users::FernsController < ApplicationController
     elsif fern.update(fern_params)
       render json: FernSerializer.new(Fern.update(update_params))
     else
-      render json: { "errors": {"status": "400", "details": "Bad Request"}}, status: 404
+      render json: ::Errors.bad_request, status: 404
     end
   end
 
