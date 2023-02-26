@@ -1,5 +1,6 @@
 class Fern < ApplicationRecord
   belongs_to :shelf
+  has_one :user, through: :shelf
   has_many :interactions
 
   validates_presence_of :name, :health, :preferred_contact_method, :shelf_id
