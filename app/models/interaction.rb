@@ -1,6 +1,6 @@
 class Interaction < ApplicationRecord
   belongs_to :fern
-  validates_presence_of :evaluation
-
-
+  validates :evaluation, 
+    presence: true, 
+    inclusion: { in: ['Positive', 'Negative', 'Neutral'] }
 end
