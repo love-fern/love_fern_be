@@ -48,10 +48,11 @@ RSpec.describe "ferns API endpoints" do
       end
     end
 
-    it 'can send the information of a single fern' do
+    it 'can send the information of a single fern with user and interactions included' do
       user = create(:user)
       shelf = create(:shelf, user_id: user.id)
       fern = create(:fern, shelf_id: shelf.id)
+      interaction = fern.interactions.create(evaluation: 'Positive')
 
       get api_v1_user_fern_path(user, fern), headers: {"HTTP_FERN_KEY" => ENV["FErn_key"]}
 
@@ -90,6 +91,53 @@ RSpec.describe "ferns API endpoints" do
       expect(fern_response[:relationships][:shelf][:data]).to be_a(Hash)
       expect(fern_response[:relationships][:shelf][:data][:id]).to eq(shelf.id.to_s)
       expect(fern_response[:relationships][:shelf][:data][:type]).to eq("shelf")
+
+      expect(fern_response[:relationships]).to have_key(:user)
+      expect(fern_response[:relationships][:user][:data]).to be_a(Hash)
+      expect(fern_response[:relationships][:user][:data][:id]).to eq(user.id.to_s)
+      expect(fern_response[:relationships][:user][:data][:type]).to eq("user")
+
+      expect(fern_response[:relationships]).to have_key(:interactions)
+      expect(fern_response[:relationships][:interactions][:data]).to be_an(Array)
+      expect(fern_response[:relationships][:interactions][:data][0][:id]).to eq(interaction.id.to_s)
+      expect(fern_response[:relationships][:interactions][:data][0][:type]).to eq("interaction")
+
+      included_response = parsed_response[:included]
+
+      expect(included_response).to be_an(Array)
+
+      expect(included_response[0]).to have_key(:id)
+      expect(included_response[0][:id]).to eq(interaction.id.to_s)
+
+      expect(included_response[0]).to have_key(:type)
+      expect(included_response[0][:type]).to eq("interaction")
+
+      expect(included_response[0]).to have_key(:attributes)
+      expect(included_response[0][:attributes]).to be_a(Hash)
+
+      expect(included_response[0][:attributes]).to have_key(:evaluation)
+      expect(included_response[0][:attributes][:evaluation]).to eq(interaction.evaluation)
+
+      expect(included_response[0][:attributes]).to have_key(:created_at)
+      expect(included_response[0][:attributes][:created_at]).to eq(interaction.created_at.as_json)
+
+      expect(included_response[1]).to have_key(:id)
+      expect(included_response[1][:id]).to eq(user.id.to_s)
+
+      expect(included_response[1]).to have_key(:type)
+      expect(included_response[1][:type]).to eq("user")
+
+      expect(included_response[1]).to have_key(:attributes)
+      expect(included_response[1][:attributes]).to be_a(Hash)
+
+      expect(included_response[1][:attributes]).to have_key(:name)
+      expect(included_response[1][:attributes][:name]).to eq(user.name)
+
+      expect(included_response[1][:attributes]).to have_key(:email)
+      expect(included_response[1][:attributes][:email]).to eq(user.email)
+
+      expect(included_response[1][:attributes]).to have_key(:google_id)
+      expect(included_response[1][:attributes][:google_id]).to eq(user.google_id)
     end
 
     it 'can create a new fern' do
@@ -265,7 +313,7 @@ RSpec.describe "ferns API endpoints" do
       expect(response).to be_successful
       parsed_response = JSON.parse(response.body, symbolize_names: true)
       expect(parsed_response[:included]).to be_an(Array)
-      expect(parsed_response[:included].count).to eq(3)
+      expect(parsed_response[:included].count).to eq(4)
       expect(parsed_response[:included][0][:attributes][:evaluation]).to eq("Negative")
       expect(parsed_response[:included][1][:id]).to eq(interaction.id.to_s)
       expect(parsed_response[:included][2][:id]).to eq(interaction2.id.to_s)

@@ -5,7 +5,7 @@ class Api::V1::Users::FernsController < ApplicationController
   end
 
   def show
-    options = { include: [:interactions] }
+    options = { include: [:interactions, :user] }
     render json: FernSerializer.new(Fern.find(params[:id]), options)
   end
 
