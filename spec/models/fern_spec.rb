@@ -79,7 +79,7 @@ RSpec.describe Fern do
         end
 
         it 'creates a negative interaction entry' do
-          fern.message_update(upper_threshold-0.1)
+          fern.message_update(lower_threshold-0.1)
           expect(Interaction.last.evaluation).to eq("Negative")
         end
 
