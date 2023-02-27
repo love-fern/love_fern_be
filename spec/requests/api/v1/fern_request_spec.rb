@@ -1,322 +1,384 @@
+# todo: test json responses for fern update and delete
 require 'rails_helper'
 
 RSpec.describe "ferns API endpoints" do
+  let!(:headers) { {"HTTP_FERN_KEY" => ENV["FErn_key"]} }
+  let!(:user) { create(:user) }
+  let!(:shelf) { create(:shelf, user_id: user.id) }
+  let(:fern) { create(:fern, shelf_id: shelf.id) }
+
   describe "happy path testing" do
-    it 'sends a list of all a users ferns' do
-      user = create(:user)
-      shelf = create(:shelf, user_id: user.id)
-      ferns = create_list(:fern, 3, shelf_id: shelf.id)
+    describe 'fern index' do
+      let!(:ferns) { create_list(:fern, 3, shelf_id: shelf.id) }
+      before { get api_v1_user_ferns_path(user.id), headers: headers }
 
-      get api_v1_user_ferns_path(user.id), headers: {"HTTP_FERN_KEY" => ENV["FErn_key"]}
+      it 'sends all ferns for a user' do
+        expect(response).to be_successful
+  
+        parsed_response = JSON.parse(response.body, symbolize_names: true)
+  
+        expect(parsed_response).to have_key(:data)
+        expect(parsed_response[:data]).to be_a(Array)
+  
+        ferns_response = parsed_response[:data]
+  
+        ferns_response.each_with_index do |fern, i|
+            expect(fern).to have_key(:id)
+            expect(fern[:id]).to be_a(String)
+            expect(fern[:id]).to eq(ferns[i].id.to_s)
+    
+            expect(fern).to have_key(:type)
+            expect(fern[:type]).to be_a(String)
+            expect(fern[:type]).to eq("fern")
+    
+            expect(fern[:attributes]).to have_key(:name)
+            expect(fern[:attributes][:name]).to be_a(String)
+            expect(fern[:attributes][:name]).to eq(ferns[i].name)
+    
+            expect(fern[:attributes]).to have_key(:health)
+            expect(fern[:attributes][:health]).to be_a(Integer)
+            expect(fern[:attributes][:health]).to eq(ferns[i].health)
+    
+            expect(fern[:attributes]).to have_key(:preferred_contact_method)
+            expect(fern[:attributes][:preferred_contact_method]).to be_a(String)
+            expect(fern[:attributes][:preferred_contact_method]).to eq(ferns[i].preferred_contact_method)
+        end
+      end
+      
+      it 'sends fern relationships' do
+        ferns_response = JSON.parse(response.body, symbolize_names: true)[:data]
 
-      expect(response).to be_successful
+        ferns_response.each do |fern|
+            expect(fern).to have_key(:relationships)
 
-      parsed_response = JSON.parse(response.body, symbolize_names: true)
-
-      expect(parsed_response).to have_key(:data)
-      expect(parsed_response[:data]).to be_a(Array)
-
-      ferns_response = parsed_response[:data]
-
-      ferns_response.each_with_index do |fern, i|
-        expect(fern).to have_key(:id)
-        expect(fern[:id]).to be_a(String)
-        expect(fern[:id]).to eq(ferns[i].id.to_s)
-
-        expect(fern).to have_key(:type)
-        expect(fern[:type]).to be_a(String)
-        expect(fern[:type]).to eq("fern")
-
-        expect(fern[:attributes]).to have_key(:name)
-        expect(fern[:attributes][:name]).to be_a(String)
-        expect(fern[:attributes][:name]).to eq(ferns[i].name)
-
-        expect(fern[:attributes]).to have_key(:health)
-        expect(fern[:attributes][:health]).to be_a(Integer)
-        expect(fern[:attributes][:health]).to eq(ferns[i].health)
-
-        expect(fern[:attributes]).to have_key(:preferred_contact_method)
-        expect(fern[:attributes][:preferred_contact_method]).to be_a(String)
-        expect(fern[:attributes][:preferred_contact_method]).to eq(ferns[i].preferred_contact_method)
-
-        expect(fern).to have_key(:relationships)
-
-        expect(fern[:relationships]).to have_key(:shelf)
-        expect(fern[:relationships][:shelf][:data]).to be_a(Hash)
-        expect(fern[:relationships][:shelf][:data][:id]).to eq(shelf.id.to_s)
-        expect(fern[:relationships][:shelf][:data][:type]).to eq("shelf")
+            expect(fern[:relationships]).to have_key(:shelf)
+            expect(fern[:relationships][:shelf][:data]).to be_a(Hash)
+            expect(fern[:relationships][:shelf][:data][:id]).to eq(shelf.id.to_s)
+            expect(fern[:relationships][:shelf][:data][:type]).to eq("shelf")
+  
+            expect(fern[:relationships]).to have_key(:user)
+            expect(fern[:relationships][:user][:data]).to be_a(Hash)
+            expect(fern[:relationships][:user][:data][:id]).to eq(user.id.to_s)
+            expect(fern[:relationships][:user][:data][:type]).to eq("user")
+  
+            expect(fern[:relationships]).to have_key(:interactions)
+            expect(fern[:relationships][:interactions][:data]).to be_an(Array)
+        end
       end
     end
 
-    it 'can send the information of a single fern with user and interactions included' do
-      user = create(:user)
-      shelf = create(:shelf, user_id: user.id)
-      fern = create(:fern, shelf_id: shelf.id)
-      interaction = fern.interactions.create(evaluation: 'Positive')
+    describe 'fern show' do
+      let!(:interaction1) { create(:interaction, fern_id: fern.id, created_at: Time.now - 1.days) }
+      let!(:interaction2) { create(:interaction, fern_id: fern.id, created_at: Time.now - 2.days) }
+      let!(:interaction3) { create(:interaction, fern_id: fern.id) }
+      let!(:interaction4) { create(:interaction, fern_id: fern.id, created_at: Time.now - 3.days) }
+      before { get api_v1_user_fern_path(user, fern), headers: headers }
 
-      get api_v1_user_fern_path(user, fern), headers: {"HTTP_FERN_KEY" => ENV["FErn_key"]}
+      it 'sends one fern for a user' do
+        expect(response).to be_successful
+  
+        parsed_response = JSON.parse(response.body, symbolize_names: true)
+  
+        expect(parsed_response).to have_key(:data)
+        expect(parsed_response[:data]).to be_a(Hash)
+  
+        fern_response = parsed_response[:data]
+  
+        expect(fern_response).to have_key(:id)
+        expect(fern_response[:id]).to be_a(String)
+        expect(fern_response[:id]).to eq(fern.id.to_s)
+  
+        expect(fern_response).to have_key(:type)
+        expect(fern_response[:type]).to be_a(String)
+        expect(fern_response[:type]).to eq("fern")
+  
+        expect(fern_response[:attributes]).to have_key(:name)
+        expect(fern_response[:attributes][:name]).to be_a(String)
+        expect(fern_response[:attributes][:name]).to eq(fern.name)
+  
+        expect(fern_response[:attributes]).to have_key(:health)
+        expect(fern_response[:attributes][:health]).to be_a(Integer)
+        expect(fern_response[:attributes][:health]).to eq(fern.health)
+  
+        expect(fern_response[:attributes]).to have_key(:preferred_contact_method)
+        expect(fern_response[:attributes][:preferred_contact_method]).to be_a(String)
+        expect(fern_response[:attributes][:preferred_contact_method]).to eq(fern.preferred_contact_method)
+      end
 
-      expect(response).to be_successful
+      it 'sends fern relationships' do
+        fern_response = JSON.parse(response.body, symbolize_names: true)[:data]
 
-      parsed_response = JSON.parse(response.body, symbolize_names: true)
+        expect(fern_response).to have_key(:relationships)
+  
+        expect(fern_response[:relationships]).to have_key(:shelf)
+        expect(fern_response[:relationships][:shelf][:data]).to be_a(Hash)
+        expect(fern_response[:relationships][:shelf][:data][:id]).to eq(shelf.id.to_s)
+        expect(fern_response[:relationships][:shelf][:data][:type]).to eq("shelf")
+  
+        expect(fern_response[:relationships]).to have_key(:user)
+        expect(fern_response[:relationships][:user][:data]).to be_a(Hash)
+        expect(fern_response[:relationships][:user][:data][:id]).to eq(user.id.to_s)
+        expect(fern_response[:relationships][:user][:data][:type]).to eq("user")
+  
+        expect(fern_response[:relationships]).to have_key(:interactions)
+        expect(fern_response[:relationships][:interactions][:data]).to be_an(Array)
 
-      expect(parsed_response).to have_key(:data)
-      expect(parsed_response[:data]).to be_a(Hash)
+        expected_interactions = [interaction3, interaction1, interaction2]
 
-      fern_response = parsed_response[:data]
+        fern_response[:relationships][:interactions][:data].each_with_index do |interaction, i|
+          expect(fern_response[:relationships][:interactions][:data][i][:id]).to eq(expected_interactions[i].id.to_s)
+          expect(fern_response[:relationships][:interactions][:data][i][:type]).to eq("interaction")
+        end
+      end
 
-      expect(fern_response).to have_key(:id)
-      expect(fern_response[:id]).to be_a(String)
-      expect(fern_response[:id]).to eq(fern.id.to_s)
+      it 'includes user attributes' do
+        included_response = JSON.parse(response.body, symbolize_names: true)[:included]
+        included_response.select! { |included| included[:type] == "user" }
 
-      expect(fern_response).to have_key(:type)
-      expect(fern_response[:type]).to be_a(String)
-      expect(fern_response[:type]).to eq("fern")
+        expect(included_response.count).to eq(1)
 
-      expect(fern_response[:attributes]).to have_key(:name)
-      expect(fern_response[:attributes][:name]).to be_a(String)
-      expect(fern_response[:attributes][:name]).to eq(fern.name)
+        expect(included_response[0]).to have_key(:id)
+        expect(included_response[0][:id]).to eq(user.id.to_s)
+  
+        expect(included_response[0]).to have_key(:type)
+        expect(included_response[0][:type]).to eq("user")
+  
+        expect(included_response[0]).to have_key(:attributes)
+        expect(included_response[0][:attributes]).to be_a(Hash)
+  
+        expect(included_response[0][:attributes]).to have_key(:name)
+        expect(included_response[0][:attributes][:name]).to eq(user.name)
+  
+        expect(included_response[0][:attributes]).to have_key(:email)
+        expect(included_response[0][:attributes][:email]).to eq(user.email)
+  
+        expect(included_response[0][:attributes]).to have_key(:google_id)
+        expect(included_response[0][:attributes][:google_id]).to eq(user.google_id)
+      end
 
-      expect(fern_response[:attributes]).to have_key(:health)
-      expect(fern_response[:attributes][:health]).to be_a(Integer)
-      expect(fern_response[:attributes][:health]).to eq(fern.health)
+      it 'includes attributes for the last 3 interactions' do
+        included_response = JSON.parse(response.body, symbolize_names: true)[:included]
+        included_response.select! { |included| included[:type] == "interaction" }
 
-      expect(fern_response[:attributes]).to have_key(:preferred_contact_method)
-      expect(fern_response[:attributes][:preferred_contact_method]).to be_a(String)
-      expect(fern_response[:attributes][:preferred_contact_method]).to eq(fern.preferred_contact_method)
+        expect(included_response.count).to eq(3)
 
-      expect(fern_response).to have_key(:relationships)
+        expected_interactions = [interaction3, interaction1, interaction2]
 
-      expect(fern_response[:relationships]).to have_key(:shelf)
-      expect(fern_response[:relationships][:shelf][:data]).to be_a(Hash)
-      expect(fern_response[:relationships][:shelf][:data][:id]).to eq(shelf.id.to_s)
-      expect(fern_response[:relationships][:shelf][:data][:type]).to eq("shelf")
+        included_response.each_with_index do |included, i|
+          expect(included).to have_key(:id)
+          expect(included[:id]).to eq(expected_interactions[i].id.to_s)
+    
+          expect(included).to have_key(:type)
+          expect(included[:type]).to eq("interaction")
+    
+          expect(included).to have_key(:attributes)
+          expect(included[:attributes]).to be_a(Hash)
 
-      expect(fern_response[:relationships]).to have_key(:user)
-      expect(fern_response[:relationships][:user][:data]).to be_a(Hash)
-      expect(fern_response[:relationships][:user][:data][:id]).to eq(user.id.to_s)
-      expect(fern_response[:relationships][:user][:data][:type]).to eq("user")
+          expect(included[:attributes]).to have_key(:evaluation)
+          expect(included[:attributes][:evaluation]).to eq(expected_interactions[i].evaluation)
 
-      expect(fern_response[:relationships]).to have_key(:interactions)
-      expect(fern_response[:relationships][:interactions][:data]).to be_an(Array)
-      expect(fern_response[:relationships][:interactions][:data][0][:id]).to eq(interaction.id.to_s)
-      expect(fern_response[:relationships][:interactions][:data][0][:type]).to eq("interaction")
-
-      included_response = parsed_response[:included]
-
-      expect(included_response).to be_an(Array)
-
-      expect(included_response[0]).to have_key(:id)
-      expect(included_response[0][:id]).to eq(interaction.id.to_s)
-
-      expect(included_response[0]).to have_key(:type)
-      expect(included_response[0][:type]).to eq("interaction")
-
-      expect(included_response[0]).to have_key(:attributes)
-      expect(included_response[0][:attributes]).to be_a(Hash)
-
-      expect(included_response[0][:attributes]).to have_key(:evaluation)
-      expect(included_response[0][:attributes][:evaluation]).to eq(interaction.evaluation)
-
-      expect(included_response[0][:attributes]).to have_key(:created_at)
-      expect(included_response[0][:attributes][:created_at]).to eq(interaction.created_at.as_json)
-
-      expect(included_response[1]).to have_key(:id)
-      expect(included_response[1][:id]).to eq(user.id.to_s)
-
-      expect(included_response[1]).to have_key(:type)
-      expect(included_response[1][:type]).to eq("user")
-
-      expect(included_response[1]).to have_key(:attributes)
-      expect(included_response[1][:attributes]).to be_a(Hash)
-
-      expect(included_response[1][:attributes]).to have_key(:name)
-      expect(included_response[1][:attributes][:name]).to eq(user.name)
-
-      expect(included_response[1][:attributes]).to have_key(:email)
-      expect(included_response[1][:attributes][:email]).to eq(user.email)
-
-      expect(included_response[1][:attributes]).to have_key(:google_id)
-      expect(included_response[1][:attributes][:google_id]).to eq(user.google_id)
+          expect(included[:attributes]).to have_key(:created_at)
+          expect(included[:attributes][:created_at]).to eq(expected_interactions[i].created_at.as_json)
+        end
+      end
     end
 
-    it 'can create a new fern' do
-      user = create(:user)
-      shelf = user.shelves.find_by(name: 'Family')
-      fern_params = ({
+    describe 'fern create' do
+      let(:fern_params) {{
         name: 'The Big Pepperoni',
         preferred_contact_method: "text",
-        shelf: 'Family'
-      })
-      headers = {"CONTENT_TYPE" => "application/json",
-        "HTTP_FERN_KEY" => ENV["FErn_key"]}
+        shelf: shelf.name
+      }}
+      before do
+        post api_v1_user_ferns_path(user.google_id), headers: headers, params: fern_params
+      end
 
-      post "/api/v1/users/#{user.google_id}/ferns", headers: headers, params: JSON.generate(fern_params)
-      created_fern = Fern.last
+      it 'can create a new fern' do
+        expect(response).to be_successful
 
-      expect(response).to be_successful
-      expect(created_fern.name).to eq("The Big Pepperoni")
-      expect(created_fern.health).to eq(7)
-      expect(created_fern.preferred_contact_method).to eq("text")
-      expect(created_fern.shelf_id).to eq(shelf.id)
+        created_fern = Fern.last
+  
+        expect(created_fern.name).to eq("The Big Pepperoni")
+        expect(created_fern.health).to eq(7)
+        expect(created_fern.preferred_contact_method).to eq("text")
+        expect(created_fern.shelf_id).to eq(shelf.id)
+      end
+
+      it 'returns created fern as json' do
+        parsed_response = JSON.parse(response.body, symbolize_names: true)
+  
+        expect(parsed_response).to have_key(:data)
+        expect(parsed_response[:data]).to be_a(Hash)
+  
+        fern_response = parsed_response[:data]
+    
+        expect(fern_response).to have_key(:id)
+        expect(fern_response[:id]).to be_a(String)
+  
+        expect(fern_response).to have_key(:type)
+        expect(fern_response[:type]).to be_a(String)
+        expect(fern_response[:type]).to eq("fern")
+  
+        expect(fern_response).to have_key(:attributes)
+  
+        expect(fern_response[:attributes]).to have_key(:name)
+        expect(fern_response[:attributes][:name]).to be_a(String)
+        expect(fern_response[:attributes][:name]).to eq(fern_params[:name])
+  
+        expect(fern_response[:attributes]).to have_key(:health)
+        expect(fern_response[:attributes][:health]).to be_a(Integer)
+        expect(fern_response[:attributes][:health]).to eq(7)
+  
+        expect(fern_response[:attributes]).to have_key(:preferred_contact_method)
+        expect(fern_response[:attributes][:preferred_contact_method]).to be_a(String)
+        expect(fern_response[:attributes][:preferred_contact_method]).to eq(fern_params[:preferred_contact_method])
+  
+        expect(fern_response).to have_key(:relationships)
+    
+        expect(fern_response[:relationships]).to have_key(:shelf)
+        expect(fern_response[:relationships][:shelf][:data]).to be_a(Hash)
+        expect(fern_response[:relationships][:shelf][:data][:id]).to be_a(String)
+        expect(fern_response[:relationships][:shelf][:data][:type]).to eq("shelf")
+  
+        expect(fern_response[:relationships]).to have_key(:user)
+        expect(fern_response[:relationships][:user][:data]).to be_a(Hash)
+        expect(fern_response[:relationships][:user][:data][:id]).to be_a(String)
+        expect(fern_response[:relationships][:user][:data][:type]).to eq("user")
+
+      end
     end
 
-    it 'can update an existing fern' do
-      user = create(:user)
-      shelf = create(:shelf, user_id: user.id)
-      shelf2 = create(:shelf, user_id: user.id)
-      fern = create(:fern, 
-                    shelf_id: shelf.id,
-                    preferred_contact_method: "email")
-      fern_id = fern.id
+    describe 'fern update' do
+      it 'can update an existing fern' do
+        shelf2 = create(:shelf, user_id: user.id)
+  
+        fern_update_params = {shelf_id: shelf2.id,
+                              name: "Fernilicious",
+                              preferred_contact_method: "Don't"}
 
-      fern_update_params = {shelf_id: shelf2.id,
-                            name: "Fernilicious",
-                            preferred_contact_method: "Don't"}
-      headers = { 'CONTENT_TYPE' => 'application/json',
-        "HTTP_FERN_KEY" => ENV["FErn_key"] }
-      patch api_v1_user_fern_path(user.id, fern_id), headers: headers, params: JSON.generate(fern_update_params)
+        patch api_v1_user_fern_path(user.id, fern.id), headers: headers, params: fern_update_params
+        updated_fern = Fern.find(fern.id)
 
-      updated_fern = Fern.find_by(id: fern_id)
-      expect(response).to be_successful
-      expect(updated_fern.shelf_id).to eq(shelf2.id)
-      expect(updated_fern.name).to eq("Fernilicious")
-      expect(updated_fern.preferred_contact_method).to eq("Don't")
+        expect(response).to be_successful
+        expect(updated_fern.shelf_id).to eq(shelf2.id)
+        expect(updated_fern.name).to eq("Fernilicious")
+        expect(updated_fern.preferred_contact_method).to eq("Don't")
+      end
+
+      context 'message sent to sentiment api' do
+        it 'can decrease the health and store a negative interaction', :vcr do
+          message = "Die in a dumpster fire you muffin boy." # sentiment score: -0.8
+          patch api_v1_user_fern_path(user.id, fern.id), params: { message: message }, headers: headers
+          updated_fern = Fern.find(fern.id)
+          
+          expect(updated_fern.health).to eq(fern.health - 1)
+
+          interaction = Interaction.last
+
+          expect(interaction.evaluation).to eq("Negative")
+        end
+
+        it 'can increase the health and store a positive interaction', :vcr do
+          message = "I'm so pleased to make your acquaintance, muffin man." # sentiment score: 0.9
+          patch api_v1_user_fern_path(user.id, fern.id), params: { message: message }, headers: headers
+          updated_fern = Fern.find(fern.id)
+
+          expect(updated_fern.health).to eq(fern.health + 1)
+
+          interaction = Interaction.last
+
+          expect(interaction.evaluation).to eq("Positive")
+        end
+
+        it 'can leave health unchanged and store a neutral interaction', :vcr do
+          message = "Hello. I am a muffin. Eat me. Please and thank you." # sentiment score: 0
+          patch api_v1_user_fern_path(user.id, fern.id), params: { message: message }, headers: headers
+          updated_fern = Fern.find(fern.id)
+
+          expect(updated_fern.health).to eq(fern.health)
+
+          interaction = Interaction.last
+
+          expect(interaction.evaluation).to eq("Neutral")
+        end
+      end
     end
 
-    it 'can delete a fern from the database' do
-      user = create(:user)
-      shelf = create(:shelf, user_id: user.id)
-      fern = create(:fern, shelf_id: shelf.id)
-
-      expect(Fern.find_by(id: fern.id)).to eq(fern)
-
-      delete api_v1_user_fern_path(user.id, fern.id), headers: {"HTTP_FERN_KEY" => ENV["FErn_key"]}
-
-      expect(response).to be_successful
-      expect{ Fern.find(fern.id) }.to raise_error(ActiveRecord::RecordNotFound)
-    end
-
-    it 'can call the sentiment analazyer and update the health of a fern and return that new fern', :vcr do
-      user = create(:user)
-      shelf = create(:shelf, user_id: user.id)
-      fern = create(:fern, shelf_id: shelf.id)
-      message = "Hello. I am a muffin. Eat me."
-      patch api_v1_user_fern_path(user.id, fern.id), params: { message: message }, headers: {"HTTP_FERN_KEY" => ENV["FErn_key"]}
-
-      updated_fern = Fern.find_by(id: fern.id)
-      expect(updated_fern.health).to eq(fern.health - 1)
-
-
+    describe 'fern delete' do
+      it 'can delete a fern from the database' do
+        expect(Fern.find(fern.id)).to eq(fern)
+  
+        delete api_v1_user_fern_path(user.id, fern.id), headers: headers
+  
+        expect(response).to be_successful
+        expect{ Fern.find(fern.id) }.to raise_error(ActiveRecord::RecordNotFound)
+      end
     end
   end
 
   describe "sad path testing" do
-    it 'will not update a fern without filling all fields in' do
-      user = create(:user)
-      shelf = create(:shelf, user_id: user.id)
-      shelf2 = create(:shelf, user_id: user.id)
-      fern = create(:fern, 
-                    shelf_id: shelf.id,
-                    name: "Fernilicious",
-                    preferred_contact_method: "email")
+    describe 'fern create' do
+      it "will not create fern if field is blank" do
+        fern_params = ({
+          name: '',
+          preferred_contact_method: "text",
+          shelf: 'Family'
+        })
+        previous_fern_count = Fern.count
+        post api_v1_user_ferns_path(user.google_id), headers: headers, params: fern_params
+  
+        expect(Fern.count).to eq(previous_fern_count)
+        expect(response).to_not be_successful
 
-      fern_update_params = {shelf_id: shelf2.id,
-                            name: "",
-                            preferred_contact_method: "Don't"}
+        parsed_response = JSON.parse(response.body, symbolize_names: true)
 
-      headers = { 'CONTENT_TYPE' => 'application/json',
-        "HTTP_FERN_KEY" => ENV["FErn_key"] }
+        expect(parsed_response).to have_key(:error)
+        expect(parsed_response[:error]).to be_a(Hash)
 
-      fern_id = fern.id
-      patch api_v1_user_fern_path(user.id, fern_id), headers: headers, params: JSON.generate(fern_update_params)
-      updated_fern = Fern.find_by(id: fern_id)
+        expect(parsed_response[:error]).to have_key(:code)
+        expect(parsed_response[:error][:code]).to be_a(Integer)
 
-      expect(response).to_not be_successful
-      parsed_response = JSON.parse(response.body, symbolize_names: true)
-
-      expect(parsed_response).to have_key(:error)
-      expect(parsed_response[:error]).to be_a(Hash)
-
-      expect(parsed_response[:error]).to have_key(:code)
-      expect(parsed_response[:error][:code]).to be_a(Integer)
-
-      expect(parsed_response[:error]).to have_key(:message)
-      expect(parsed_response[:error][:message]).to be_a(String)
+        expect(parsed_response[:error]).to have_key(:message)
+        expect(parsed_response[:error][:message]).to be_a(String)
+      end
     end
 
-    it "will not create a fern if a field is left blank" do
-      user = create(:user)
-      shelf = create(:shelf, user_id: user.id)
-      fern_params = ({
-        name: '',
-        preferred_contact_method: "text",
-        shelf: 'Family'
-      })
+    describe 'fern update' do
+      it 'will not update fern if field is blank' do
+        initial_fern = Fern.find(fern.id)
 
-      headers = {"CONTENT_TYPE" => "application/json",
-        "HTTP_FERN_KEY" => ENV["FErn_key"]}
+        shelf2 = create(:shelf, user_id: user.id)
+        fern_update_params = {shelf_id: shelf2.id,
+                              name: "",
+                              preferred_contact_method: "Don't"}
+        patch api_v1_user_fern_path(user.id, fern.id), headers: headers, params: fern_update_params
 
-      post "/api/v1/users/#{user.google_id}/ferns", headers: headers, params: JSON.generate(fern_params)
+        updated_fern = Fern.find(fern.id)
+  
+        expect(updated_fern).to eq(initial_fern)
+        expect(response).to_not be_successful
 
-      expect(response).to_not be_successful
-      parsed_response = JSON.parse(response.body, symbolize_names: true)
+        parsed_response = JSON.parse(response.body, symbolize_names: true)
 
-      expect(parsed_response).to have_key(:error)
-      expect(parsed_response[:error]).to be_a(Hash)
+        expect(parsed_response).to have_key(:error)
+        expect(parsed_response[:error]).to be_a(Hash)
 
-      expect(parsed_response[:error]).to have_key(:code)
-      expect(parsed_response[:error][:code]).to be_a(Integer)
+        expect(parsed_response[:error]).to have_key(:code)
+        expect(parsed_response[:error][:code]).to be_a(Integer)
 
-      expect(parsed_response[:error]).to have_key(:message)
-      expect(parsed_response[:error][:message]).to be_a(String)
-    end
-  end
-
-  describe 'interactions' do
-    it 'can return the three most recent interactions with their information' do
-      user = create(:user)
-      shelf = create(:shelf, user_id: user.id)
-      fern = create(:fern, shelf_id: shelf.id)
-      interaction = create(:interaction, fern_id: fern.id, created_at: Time.now - 1.days)
-      interaction2 = create(:interaction, fern_id: fern.id, created_at: Time.now - 2.days)
-      interaction3 = create(:interaction, fern_id: fern.id)
-      interaction4 = create(:interaction, fern_id: fern.id, created_at: Time.now - 3.days)
-
-      get api_v1_user_fern_path(user, fern), headers: {"HTTP_FERN_KEY" => ENV["FErn_key"]}
-      expect(response).to be_successful
-
-      parsed_response = JSON.parse(response.body, symbolize_names: true)
-      
-      expect(parsed_response[:data]).to be_a(Hash)
-      expect(parsed_response[:data][:relationships]).to have_key(:shelf)
-      expect(parsed_response[:data][:relationships][:shelf][:data][:id]).to eq(shelf.id.to_s)
-      expect(parsed_response[:data][:relationships][:interactions][:data]).to be_an(Array)
-      expect(parsed_response[:data][:relationships][:interactions][:data].count).to eq(3)
-      expect(parsed_response[:data][:relationships][:interactions][:data][0][:id]).to eq(interaction3.id.to_s)
-      expect(parsed_response[:data][:relationships][:interactions][:data][1][:id]).to eq(interaction.id.to_s)
-      expect(parsed_response[:data][:relationships][:interactions][:data][2][:id]).to eq(interaction2.id.to_s)
+        expect(parsed_response[:error]).to have_key(:message)
+        expect(parsed_response[:error][:message]).to be_a(String)
+      end
     end
 
-    it 'can create a new interaction and store it after calling google sentiment', :vcr do
-      user = create(:user)
-      shelf = create(:shelf, user_id: user.id)
-      fern = create(:fern, shelf_id: shelf.id)
-      interaction = create(:interaction, fern_id: fern.id, created_at: Time.now - 1.days)
-      interaction2 = create(:interaction, fern_id: fern.id, created_at: Time.now - 2.days)
+    describe 'bad api key' do
+      it 'returns 403 unauthorized' do
+        headers = {"HTTP_FERN_KEY" => "not_the_key"}
+        get api_v1_user_fern_path(user, fern), headers: headers
 
-      message = "Hello. I am a muffin. Eat me."
-      patch api_v1_user_fern_path(user.id, fern.id), params: { message: message }, headers: {"HTTP_FERN_KEY" => ENV["FErn_key"]}
-
-      get api_v1_user_fern_path(user, fern), headers: {"HTTP_FERN_KEY" => ENV["FErn_key"]}
-
-      expect(response).to be_successful
-      parsed_response = JSON.parse(response.body, symbolize_names: true)
-      expect(parsed_response[:included]).to be_an(Array)
-      expect(parsed_response[:included].count).to eq(4)
-      expect(parsed_response[:included][0][:attributes][:evaluation]).to eq("Negative")
-      expect(parsed_response[:included][1][:id]).to eq(interaction.id.to_s)
-      expect(parsed_response[:included][2][:id]).to eq(interaction2.id.to_s)
+        expect(response).to_not be_successful
+        expect(response.status).to eq(403)
+      end
     end
   end
 end
