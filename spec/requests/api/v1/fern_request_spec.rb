@@ -280,8 +280,19 @@ RSpec.describe "ferns API endpoints" do
         previous_fern_count = Fern.count
         post api_v1_user_ferns_path(user.google_id), headers: headers, params: fern_params
   
-        expect(response).to_not be_successful
         expect(Fern.count).to eq(previous_fern_count)
+        expect(response).to_not be_successful
+
+        parsed_response = JSON.parse(response.body, symbolize_names: true)
+
+        expect(parsed_response).to have_key(:error)
+        expect(parsed_response[:error]).to be_a(Hash)
+
+        expect(parsed_response[:error]).to have_key(:code)
+        expect(parsed_response[:error][:code]).to be_a(Integer)
+
+        expect(parsed_response[:error]).to have_key(:message)
+        expect(parsed_response[:error][:message]).to be_a(String)
       end
     end
 
@@ -297,8 +308,19 @@ RSpec.describe "ferns API endpoints" do
 
         updated_fern = Fern.find(fern.id)
   
-        expect(response).to_not be_successful
         expect(updated_fern).to eq(initial_fern)
+        expect(response).to_not be_successful
+
+        parsed_response = JSON.parse(response.body, symbolize_names: true)
+
+        expect(parsed_response).to have_key(:error)
+        expect(parsed_response[:error]).to be_a(Hash)
+
+        expect(parsed_response[:error]).to have_key(:code)
+        expect(parsed_response[:error][:code]).to be_a(Integer)
+
+        expect(parsed_response[:error]).to have_key(:message)
+        expect(parsed_response[:error][:message]).to be_a(String)
       end
     end
 
