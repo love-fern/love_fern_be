@@ -1,3 +1,4 @@
+# todo: test json responses for fern update and delete
 require 'rails_helper'
 
 RSpec.describe "ferns API endpoints" do
@@ -183,21 +184,67 @@ RSpec.describe "ferns API endpoints" do
     end
 
     describe 'fern create' do
-      it 'can create a new fern' do
-        fern_params = ({
-          name: 'The Big Pepperoni',
-          preferred_contact_method: "text",
-          shelf: shelf.name
-        })
-  
+      let(:fern_params) {{
+        name: 'The Big Pepperoni',
+        preferred_contact_method: "text",
+        shelf: shelf.name
+      }}
+      before do
         post api_v1_user_ferns_path(user.google_id), headers: headers, params: fern_params
+      end
+
+      it 'can create a new fern' do
+        expect(response).to be_successful
+
         created_fern = Fern.last
   
-        expect(response).to be_successful
         expect(created_fern.name).to eq("The Big Pepperoni")
         expect(created_fern.health).to eq(7)
         expect(created_fern.preferred_contact_method).to eq("text")
         expect(created_fern.shelf_id).to eq(shelf.id)
+      end
+
+      it 'returns created fern as json' do
+        parsed_response = JSON.parse(response.body, symbolize_names: true)
+  
+        expect(parsed_response).to have_key(:data)
+        expect(parsed_response[:data]).to be_a(Hash)
+  
+        fern_response = parsed_response[:data]
+    
+        expect(fern_response).to have_key(:id)
+        expect(fern_response[:id]).to be_a(String)
+  
+        expect(fern_response).to have_key(:type)
+        expect(fern_response[:type]).to be_a(String)
+        expect(fern_response[:type]).to eq("fern")
+  
+        expect(fern_response).to have_key(:attributes)
+  
+        expect(fern_response[:attributes]).to have_key(:name)
+        expect(fern_response[:attributes][:name]).to be_a(String)
+        expect(fern_response[:attributes][:name]).to eq(fern_params[:name])
+  
+        expect(fern_response[:attributes]).to have_key(:health)
+        expect(fern_response[:attributes][:health]).to be_a(Integer)
+        expect(fern_response[:attributes][:health]).to eq(7)
+  
+        expect(fern_response[:attributes]).to have_key(:preferred_contact_method)
+        expect(fern_response[:attributes][:preferred_contact_method]).to be_a(String)
+        expect(fern_response[:attributes][:preferred_contact_method]).to eq(fern_params[:preferred_contact_method])
+  
+        expect(fern_response).to have_key(:relationships)
+    
+        expect(fern_response[:relationships]).to have_key(:shelf)
+        expect(fern_response[:relationships][:shelf][:data]).to be_a(Hash)
+        expect(fern_response[:relationships][:shelf][:data][:id]).to be_a(String)
+        expect(fern_response[:relationships][:shelf][:data][:type]).to eq("shelf")
+  
+        expect(fern_response[:relationships]).to have_key(:user)
+        expect(fern_response[:relationships][:user][:data]).to be_a(Hash)
+        expect(fern_response[:relationships][:user][:data][:id]).to be_a(String)
+        expect(fern_response[:relationships][:user][:data][:type]).to eq("user")
+
       end
     end
 
