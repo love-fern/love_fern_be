@@ -13,7 +13,7 @@ class Api::V1::UsersController < ApplicationController
     if user.update(name_param)
       render json: UserSerializer.new(User.update(name_param))
     else
-      render json: { "errors": {"status": "400", "details": "Bad Request"}}, status: 404
+      render json: ::ErrorsController.bad_request, status: 404
     end
   end
 
