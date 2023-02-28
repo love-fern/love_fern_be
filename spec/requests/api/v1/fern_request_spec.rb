@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe 'ferns API endpoints' do
-  let!(:headers) { { 'HTTP_FERN_KEY' => ENV['FErn_key'] } }
+  let!(:headers) { { 'HTTP_FERN_KEY' => ENV['FERN_KEY'] } }
   let!(:user) { create(:user) }
   let!(:shelf) { create(:shelf, user_id: user.id) }
   let(:fern) { create(:fern, shelf_id: shelf.id) }

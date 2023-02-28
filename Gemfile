@@ -33,6 +33,7 @@ gem 'faraday'
 gem 'jsonapi-serializer'
 
 gem 'rubocop-rails', require: false
+gem 'figaro'
 group :test do
   gem 'shoulda-matchers'
   gem 'simplecov', require: false

@@ -31,15 +31,15 @@ http_interactions:
       Content-Type:
       - application/json; charset=utf-8
       Content-Length:
-      - '171'
+      - '130'
       Etag:
-      - W/"ab-EDcMVXYLfH+OsdVcG+/P/fjwkYI"
+      - W/"82-KMvPHiVV22dD2LIGFYF4sWsF714"
       Date:
-      - Tue, 28 Feb 2023 23:10:09 GMT
+      - Tue, 28 Feb 2023 23:30:05 GMT
       Via:
       - 1.1 vegur
     body:
       encoding: UTF-8
-      string: '{"activity":"Do a jigsaw puzzle","type":"recreational","participants":1,"price":0.1,"link":"https://en.wikipedia.org/wiki/Jigsaw_puzzle","key":"8550768","accessibility":1}'
-  recorded_at: Tue, 28 Feb 2023 23:10:09 GMT
+      string: '{"activity":"Make homemade ice cream","type":"cooking","participants":1,"price":0.2,"link":"","key":"3818400","accessibility":0.2}'
+  recorded_at: Tue, 28 Feb 2023 23:30:05 GMT
 recorded_with: VCR 6.1.0

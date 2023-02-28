@@ -7,7 +7,7 @@ RSpec.describe 'user API requests' do
       email: 'nice_person@gmail.com',
       google_id: '23948sdkss'
     }
-    headers = { 'CONTENT_TYPE' => 'application/json', 'HTTP_FERN_KEY' => ENV['FErn_key'] }
+    headers = { 'CONTENT_TYPE' => 'application/json', 'HTTP_FERN_KEY' => ENV['FERN_KEY'] }
     post api_v1_users_path, headers: headers, params: JSON.generate(google_auth_params)
     created_user = User.last
 
@@ -23,7 +23,7 @@ RSpec.describe 'user API requests' do
       email: 'shelf_person@gmail.com',
       google_id: '23948sdkss'
     }
-    headers = { 'CONTENT_TYPE' => 'application/json', 'HTTP_FERN_KEY' => ENV['FErn_key'] }
+    headers = { 'CONTENT_TYPE' => 'application/json', 'HTTP_FERN_KEY' => ENV['FERN_KEY'] }
     post api_v1_users_path, headers: headers, params: JSON.generate(google_auth_params)
     created_user = User.last
 
@@ -40,7 +40,7 @@ RSpec.describe 'user API requests' do
     expect(user.name).to_not eq('this is my new name')
 
     name_change_params = { name: 'this is my new name' }
-    headers = { 'CONTENT_TYPE' => 'application/json', 'HTTP_FERN_KEY' => ENV['FErn_key'] }
+    headers = { 'CONTENT_TYPE' => 'application/json', 'HTTP_FERN_KEY' => ENV['FERN_KEY'] }
     patch api_v1_user_path(id), headers: headers, params: JSON.generate(user: name_change_params)
 
     updated_user = User.find_by(id: id)
@@ -53,7 +53,7 @@ RSpec.describe 'user API requests' do
   it 'can find or create a new user based on google id' do
     user = create(:user, google_id: '4')
 
-    headers = { 'CONTENT_TYPE' => 'application/json', 'HTTP_FERN_KEY' => ENV['FErn_key'] }
+    headers = { 'CONTENT_TYPE' => 'application/json', 'HTTP_FERN_KEY' => ENV['FERN_KEY'] }
     duplicate_google_id_params = { name: 'Jim', google_id: '4', email: 'iamjim@gmail.com' }
     post api_v1_users_path, headers: headers, params: JSON.generate(duplicate_google_id_params)
 
@@ -67,7 +67,7 @@ RSpec.describe 'user API requests' do
       user = create(:user)
       id = user.id
       name_change_params = { name: '' }
-      headers = { 'CONTENT_TYPE' => 'application/json', 'HTTP_FERN_KEY' => ENV['FErn_key'] }
+      headers = { 'CONTENT_TYPE' => 'application/json', 'HTTP_FERN_KEY' => ENV['FERN_KEY'] }
       patch api_v1_user_path(id), headers: headers, params: JSON.generate(user: name_change_params)
 
       expect(response).to_not be_successful

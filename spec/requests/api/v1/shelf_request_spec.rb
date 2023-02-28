@@ -10,7 +10,7 @@ RSpec.describe 'shelves API endpoints' do
         user_id: user1.id
       }
 
-      headers = { 'CONTENT_TYPE' => 'application/json', 'HTTP_FERN_KEY' => ENV['FErn_key'] }
+      headers = { 'CONTENT_TYPE' => 'application/json', 'HTTP_FERN_KEY' => ENV['FERN_KEY'] }
 
       post api_v1_user_shelves_path(user1), headers: headers, params: JSON.generate(shelf: shelf_params)
       created_shelf = Shelf.last
@@ -32,7 +32,7 @@ RSpec.describe 'shelves API endpoints' do
         user_id: user1.id
       }
 
-      headers = { 'CONTENT_TYPE' => 'application/json', 'HTTP_FERN_KEY' => ENV['FErn_key'] }
+      headers = { 'CONTENT_TYPE' => 'application/json', 'HTTP_FERN_KEY' => ENV['FERN_KEY'] }
       patch api_v1_user_shelf_path(user1, shelf1), headers: headers, params: JSON.generate(shelf: shelf_params)
 
       updated_shelf = Shelf.find_by(id: shelf_id)
@@ -47,7 +47,7 @@ RSpec.describe 'shelves API endpoints' do
 
       expect(Shelf.find_by(id: shelf1.id)).to eq(shelf1)
 
-      delete "/api/v1/users/#{user1.id}/shelves/#{shelf1.id}", headers: { 'HTTP_FERN_KEY' => ENV['FErn_key'] }
+      delete "/api/v1/users/#{user1.id}/shelves/#{shelf1.id}", headers: { 'HTTP_FERN_KEY' => ENV['FERN_KEY'] }
 
       expect(response).to be_successful
       expect { Shelf.find(shelf1.id) }.to raise_error(ActiveRecord::RecordNotFound)
@@ -58,7 +58,7 @@ RSpec.describe 'shelves API endpoints' do
       shelf = create(:shelf, user_id: user.id)
       ferns = create_list(:fern, 4, shelf_id: shelf.id)
 
-      get api_v1_user_shelves_path(user.google_id, shelf.id), headers: { 'HTTP_FERN_KEY' => ENV['FErn_key'] }
+      get api_v1_user_shelves_path(user.google_id, shelf.id), headers: { 'HTTP_FERN_KEY' => ENV['FERN_KEY'] }
 
       expect(response).to be_successful
 
@@ -146,7 +146,7 @@ RSpec.describe 'shelves API endpoints' do
         user_id: user1.id
       }
 
-      headers = { 'CONTENT_TYPE' => 'application/json', 'HTTP_FERN_KEY' => ENV['FErn_key'] }
+      headers = { 'CONTENT_TYPE' => 'application/json', 'HTTP_FERN_KEY' => ENV['FERN_KEY'] }
 
       post api_v1_user_shelves_path(user1), headers: headers, params: JSON.generate(shelf: shelf_params)
 
@@ -175,7 +175,7 @@ RSpec.describe 'shelves API endpoints' do
         user_id: user1.id
       }
 
-      headers = { 'CONTENT_TYPE' => 'application/json', 'HTTP_FERN_KEY' => ENV['FErn_key'] }
+      headers = { 'CONTENT_TYPE' => 'application/json', 'HTTP_FERN_KEY' => ENV['FERN_KEY'] }
 
       patch api_v1_user_shelf_path(user1, shelf1), headers: headers, params: JSON.generate(shelf: shelf_params)
 

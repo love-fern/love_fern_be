@@ -31,15 +31,15 @@ http_interactions:
       Content-Type:
       - application/json; charset=utf-8
       Content-Length:
-      - '146'
+      - '138'
       Etag:
-      - W/"92-1vHPnOO7DF2c3UjFKHcOEb2h2ns"
+      - W/"8a-MtTpA5zJU3NtjUui+IJ2t7njp0k"
       Date:
-      - Tue, 28 Feb 2023 23:10:11 GMT
+      - Tue, 28 Feb 2023 23:26:33 GMT
       Via:
       - 1.1 vegur
     body:
       encoding: UTF-8
-      string: '{"activity":"Bake pastries for you and your neighbor","type":"cooking","participants":1,"price":0.4,"link":"","key":"8125168","accessibility":0.3}'
-  recorded_at: Tue, 28 Feb 2023 23:10:11 GMT
+      string: '{"activity":"Buy a new house decoration","type":"recreational","participants":1,"price":0.4,"link":"","key":"3456114","accessibility":0.3}'
+  recorded_at: Tue, 28 Feb 2023 23:26:33 GMT
 recorded_with: VCR 6.1.0

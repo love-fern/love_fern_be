@@ -8,7 +8,7 @@ class ApplicationController < ActionController::API
   end
 
   def check_api_key
-    return if request.headers.env['HTTP_FERN_KEY'] == ENV['FErn_key']
+    return if request.headers.env['HTTP_FERN_KEY'] == ENV['FERN_KEY']
 
     render json: { error: :unauthorized }, status: 403
   end
