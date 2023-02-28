@@ -5,13 +5,13 @@ class Api::V1::Users::FernsController < ApplicationController
   end
 
   def show
-    options = { include: [:interactions, :user] }
+    options = { include: %i[interactions user] }
     render json: FernSerializer.new(Fern.find(params[:id]), options)
   end
 
   def create
-    user = User.find_by(google_id: params["user_id"])
-    shelf = user.shelves.find_by(name: params["shelf"])
+    user = User.find_by(google_id: params['user_id'])
+    shelf = user.shelves.find_by(name: params['shelf'])
     new_fern = shelf.ferns.new(fern_params)
     if new_fern.save
       render json: FernSerializer.new(new_fern)

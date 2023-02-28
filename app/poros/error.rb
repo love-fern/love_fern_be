@@ -7,7 +7,7 @@ class Error
   end
 
   def convert_messages(error)
-    if error.class == ActiveModel::Errors
+    if error.instance_of?(ActiveModel::Errors)
       error.full_messages
     else
       [error.message]

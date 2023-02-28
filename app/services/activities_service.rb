@@ -1,9 +1,9 @@
 class ActivitiesService
   def self.random_activity
-    response = conn.get("activity")
+    response = conn.get('activity')
     parse_json(response)
   end
-  
+
   def self.conn
     Faraday.new(
       url: 'http://www.boredapi.com/api/'

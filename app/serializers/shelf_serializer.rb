@@ -3,4 +3,4 @@ class ShelfSerializer
   attributes :name
   belongs_to :user
   has_many :ferns
-end 
+end

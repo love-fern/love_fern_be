@@ -9,21 +9,21 @@ class Fern < ApplicationRecord
 
   def message_update(rating)
     if rating > THRESHOLD
-      self.health += 2 if self.health < 10
-      self.interactions.create(evaluation: "Positive")
-    elsif rating < THRESHOLD*(-1)
+      self.health += 2 if health < 10
+      interactions.create(evaluation: 'Positive')
+    elsif rating < THRESHOLD * -1
       self.health -= 2 if self.health > 0
-      self.interactions.create(evaluation: "Negative")
+      interactions.create(evaluation: 'Negative')
     else
-      self.interactions.create(evaluation: "Neutral")
+      interactions.create(evaluation: 'Neutral')
     end
     health_limits
   end
 
-private
+  private
+
   def health_limits
     self.health = 10 if self.health > 10
-    self.health = 0 if self.health < 0 
+    self.health = 0 if self.health < 0
   end
-
 end
