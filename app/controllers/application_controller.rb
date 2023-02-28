@@ -6,4 +6,9 @@ class ApplicationController < ActionController::API
       render json: { error: :unauthorized }, status: 403
     end
   end
+
+  def reset_seeds
+    DatabaseCleaner.clean_with(:truncation)
+    Rails.application.load_seed
+  end
 end
