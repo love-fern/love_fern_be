@@ -16,7 +16,7 @@ class Api::V1::Users::FernsController < ApplicationController
     if new_fern.save
       render json: FernSerializer.new(new_fern)
     else
-      render json: ::ErrorsController.bad_request, status: 404
+      render json: ErrorSerializer.serialize(Error.new(new_fern.errors)), status: :unprocessable_entity
     end
   end
 
@@ -30,7 +30,7 @@ class Api::V1::Users::FernsController < ApplicationController
       fern.save
       render json: FernSerializer.new(fern)
     else
-      render json: ::ErrorsController.bad_request, status: 404
+      render json: ErrorSerializer.serialize(Error.new(fern.errors)), status: :unprocessable_entity
     end
   end
 

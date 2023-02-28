@@ -153,14 +153,14 @@ RSpec.describe "shelves API endpoints" do
       expect(response).to_not be_successful
       parsed_response = JSON.parse(response.body, symbolize_names: true)
 
-      expect(parsed_response).to have_key(:error)
-      expect(parsed_response[:error]).to be_a(Hash)
+      expect(parsed_response).to have_key(:errors)
+      expect(parsed_response[:errors]).to be_a(Array)
 
-      expect(parsed_response[:error]).to have_key(:code)
-      expect(parsed_response[:error][:code]).to be_a(Integer)
+      expect(parsed_response).to have_key(:message)
+      expect(parsed_response[:message]).to be_a(String)
 
-      expect(parsed_response[:error]).to have_key(:message)
-      expect(parsed_response[:error][:message]).to be_a(String)
+      expect(parsed_response).to have_key(:status)
+      expect(parsed_response[:status]).to be_a(String)
     end
 
     it 'will not update a shelf if any fields are left blank' do
@@ -182,14 +182,14 @@ RSpec.describe "shelves API endpoints" do
       expect(response).to_not be_successful
       parsed_response = JSON.parse(response.body, symbolize_names: true)
 
-      expect(parsed_response).to have_key(:error)
-      expect(parsed_response[:error]).to be_a(Hash)
+      expect(parsed_response).to have_key(:errors)
+      expect(parsed_response[:errors]).to be_a(Array)
 
-      expect(parsed_response[:error]).to have_key(:code)
-      expect(parsed_response[:error][:code]).to be_a(Integer)
+      expect(parsed_response).to have_key(:message)
+      expect(parsed_response[:message]).to be_a(String)
 
-      expect(parsed_response[:error]).to have_key(:message)
-      expect(parsed_response[:error][:message]).to be_a(String)
+      expect(parsed_response).to have_key(:status)
+      expect(parsed_response[:status]).to be_a(String)
     end
   end
 end
