@@ -23,16 +23,17 @@ RSpec.describe Fern do
   describe '#message_update' do
     context 'receives rating from google sentiment api' do
       context 'fern health' do
+        # updated these specs to show health increases by 2
         it 'increases if rating is above threshold' do
           fern.message_update(upper_threshold+0.1)
 
-          expect(fern.health).to eq(8)
+          expect(fern.health).to eq(9)
         end
 
         it 'decreases if rating is below threshold' do
           fern.message_update(lower_threshold-0.1)
 
-          expect(fern.health).to eq(6)
+          expect(fern.health).to eq(5)
         end
 
         it 'does not change if within or equal to threshold' do
