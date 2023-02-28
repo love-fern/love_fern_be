@@ -27,6 +27,7 @@ class Api::V1::Users::FernsController < ApplicationController
       fern.save
       render json: FernSerializer.new(fern)
     elsif fern.update(fern_params)
+      fern.save
       render json: FernSerializer.new(Fern.update(update_params))
     else
       render json: ::ErrorsController.bad_request, status: 404
@@ -40,7 +41,7 @@ class Api::V1::Users::FernsController < ApplicationController
   private
 
   def update_params
-    params.permit(:name, :shelf_id, :preferred_contact_method)
+    params.permit(:name, :shelf_id, :preferred_contact_method, :health)
   end
 
   def fern_params
