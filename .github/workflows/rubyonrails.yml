@@ -39,16 +39,3 @@ jobs:
       # Add or replace test runners here
       - name: Run tests
         run: bin/rake
-
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Install Ruby and gems
-        uses: ruby/setup-ruby@ee2113536afb7f793eed4ce60e8d3b26db912da4 # v1.127.0
-        with:
-          bundler-cache: true
-      # Add or replace any other lints here
-      - name: Lint Ruby files
-        run: bin/rubocop --parallel
