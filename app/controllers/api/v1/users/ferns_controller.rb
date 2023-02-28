@@ -26,9 +26,9 @@ class Api::V1::Users::FernsController < ApplicationController
       fern.message_update(SentimentFacade.message_rating(params[:interaction]))
       fern.save
       render json: FernSerializer.new(fern)
-    elsif fern.update(fern_params)
+    elsif fern.update(update_params)
       fern.save
-      render json: FernSerializer.new(Fern.update(update_params))
+      render json: FernSerializer.new(fern)
     else
       render json: ::ErrorsController.bad_request, status: 404
     end
