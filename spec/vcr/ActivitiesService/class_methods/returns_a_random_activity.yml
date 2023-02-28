@@ -1,0 +1,45 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://www.boredapi.com/api/activity
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v2.7.4
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - Cowboy
+      Connection:
+      - keep-alive
+      X-Powered-By:
+      - Express
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Headers:
+      - Origin, X-Requested-With, Content-Type, Accept
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '146'
+      Etag:
+      - W/"92-1vHPnOO7DF2c3UjFKHcOEb2h2ns"
+      Date:
+      - Tue, 28 Feb 2023 23:10:11 GMT
+      Via:
+      - 1.1 vegur
+    body:
+      encoding: UTF-8
+      string: '{"activity":"Bake pastries for you and your neighbor","type":"cooking","participants":1,"price":0.4,"link":"","key":"8125168","accessibility":0.3}'
+  recorded_at: Tue, 28 Feb 2023 23:10:11 GMT
+recorded_with: VCR 6.1.0
