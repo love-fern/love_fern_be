@@ -5,7 +5,7 @@ SimpleCov.start
 
 require 'vcr'
 VCR.configure do |c|
-  c.cassette_library_dir = "spec/vcr"
+  c.cassette_library_dir = 'spec/vcr'
   c.filter_sensitive_data('<FERN_KEY>') { ENV['FERN_KEY'] }
   c.filter_sensitive_data('<GOOGLE_API_KEY>') { ENV['GOOGLE_API_KEY'] }
   c.hook_into :webmock
@@ -15,7 +15,7 @@ end
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
 # Prevent database truncation if the environment is production
-abort("The Rails environment is running in production mode!") if Rails.env.production?
+abort('The Rails environment is running in production mode!') if Rails.env.production?
 require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 
