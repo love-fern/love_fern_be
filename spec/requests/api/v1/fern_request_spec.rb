@@ -270,7 +270,8 @@ RSpec.describe "ferns API endpoints" do
           interaction = "Die in a dumpster fire you muffin boy." # sentiment score: -0.8
           patch api_v1_user_fern_path(user.id, fern.id), params: { interaction: interaction }, headers: headers
           updated_fern = Fern.find(fern.id)
-          expect(updated_fern.health).to eq(fern.health - 1)
+          # changed this spec to look for health decrease by 2
+          expect(updated_fern.health).to eq(fern.health - 2)
 
           interaction = Interaction.last
 
@@ -281,8 +282,9 @@ RSpec.describe "ferns API endpoints" do
           interaction = "I'm so pleased to make your acquaintance, muffin man." # sentiment score: 0.9
           patch api_v1_user_fern_path(user.id, fern.id), params: { interaction: interaction }, headers: headers
           updated_fern = Fern.find(fern.id)
-
-          expect(updated_fern.health).to eq(fern.health + 1)
+          
+          # changed this spec to look for health increase by 2
+          expect(updated_fern.health).to eq(fern.health + 2)
 
           interaction = Interaction.last
 
