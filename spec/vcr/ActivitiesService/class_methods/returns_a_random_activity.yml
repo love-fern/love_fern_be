@@ -1,0 +1,45 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://www.boredapi.com/api/activity?participants=2
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v2.7.4
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - Cowboy
+      Connection:
+      - keep-alive
+      X-Powered-By:
+      - Express
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Headers:
+      - Origin, X-Requested-With, Content-Type, Accept
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '147'
+      Etag:
+      - W/"93-4XZMmx/UVUZ6qTW+5RgITvGvNfA"
+      Date:
+      - Tue, 28 Feb 2023 23:01:16 GMT
+      Via:
+      - 1.1 vegur
+    body:
+      encoding: UTF-8
+      string: '{"activity":"Catch up with a friend over a lunch date","type":"social","participants":2,"price":0.2,"link":"","key":"5590133","accessibility":0.15}'
+  recorded_at: Tue, 28 Feb 2023 23:01:16 GMT
+recorded_with: VCR 6.1.0
