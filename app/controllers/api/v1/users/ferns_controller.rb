@@ -22,8 +22,8 @@ class Api::V1::Users::FernsController < ApplicationController
 
   def update
     fern = Fern.find(params[:id])
-    if params[:message]
-      fern.message_update(SentimentFacade.message_rating(params[:message]))
+    if params[:interaction]
+      fern.message_update(SentimentFacade.message_rating(params[:interaction]))
       fern.save
       render json: FernSerializer.new(fern)
     elsif fern.update(fern_params)

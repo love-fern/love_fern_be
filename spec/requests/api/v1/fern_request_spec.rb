@@ -265,12 +265,11 @@ RSpec.describe "ferns API endpoints" do
         expect(updated_fern.preferred_contact_method).to eq("Don't")
       end
 
-      context 'message sent to sentiment api' do
+      context 'interaction sent to sentiment api' do
         it 'can decrease the health and store a negative interaction', :vcr do
-          message = "Die in a dumpster fire you muffin boy." # sentiment score: -0.8
-          patch api_v1_user_fern_path(user.id, fern.id), params: { message: message }, headers: headers
+          interaction = "Die in a dumpster fire you muffin boy." # sentiment score: -0.8
+          patch api_v1_user_fern_path(user.id, fern.id), params: { interaction: interaction }, headers: headers
           updated_fern = Fern.find(fern.id)
-          
           expect(updated_fern.health).to eq(fern.health - 1)
 
           interaction = Interaction.last
@@ -279,8 +278,8 @@ RSpec.describe "ferns API endpoints" do
         end
 
         it 'can increase the health and store a positive interaction', :vcr do
-          message = "I'm so pleased to make your acquaintance, muffin man." # sentiment score: 0.9
-          patch api_v1_user_fern_path(user.id, fern.id), params: { message: message }, headers: headers
+          interaction = "I'm so pleased to make your acquaintance, muffin man." # sentiment score: 0.9
+          patch api_v1_user_fern_path(user.id, fern.id), params: { interaction: interaction }, headers: headers
           updated_fern = Fern.find(fern.id)
 
           expect(updated_fern.health).to eq(fern.health + 1)
@@ -291,8 +290,8 @@ RSpec.describe "ferns API endpoints" do
         end
 
         it 'can leave health unchanged and store a neutral interaction', :vcr do
-          message = "Hello. I am a muffin. Eat me. Please and thank you." # sentiment score: 0
-          patch api_v1_user_fern_path(user.id, fern.id), params: { message: message }, headers: headers
+          interaction = "Hello. I am a muffin. Eat me. Please and thank you." # sentiment score: 0
+          patch api_v1_user_fern_path(user.id, fern.id), params: { interaction: interaction }, headers: headers
           updated_fern = Fern.find(fern.id)
 
           expect(updated_fern.health).to eq(fern.health)
