@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: http://www.boredapi.com/api/activity?participants=2
+    uri: http://www.boredapi.com/api/activity
     body:
       encoding: US-ASCII
       string: ''
@@ -31,15 +31,15 @@ http_interactions:
       Content-Type:
       - application/json; charset=utf-8
       Content-Length:
-      - '141'
+      - '171'
       Etag:
-      - W/"8d-kCHcv1nAi41TxLMowrAUkBepcxc"
+      - W/"ab-EDcMVXYLfH+OsdVcG+/P/fjwkYI"
       Date:
-      - Tue, 28 Feb 2023 23:01:15 GMT
+      - Tue, 28 Feb 2023 23:10:09 GMT
       Via:
       - 1.1 vegur
     body:
       encoding: UTF-8
-      string: '{"activity":"Play a game of tennis with a friend","type":"social","participants":2,"price":0.1,"link":"","key":"1093640","accessibility":0.4}'
-  recorded_at: Tue, 28 Feb 2023 23:01:15 GMT
+      string: '{"activity":"Do a jigsaw puzzle","type":"recreational","participants":1,"price":0.1,"link":"https://en.wikipedia.org/wiki/Jigsaw_puzzle","key":"8550768","accessibility":1}'
+  recorded_at: Tue, 28 Feb 2023 23:10:09 GMT
 recorded_with: VCR 6.1.0
