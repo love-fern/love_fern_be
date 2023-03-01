@@ -22,9 +22,9 @@ class Api::V1::Users::FernsController < ApplicationController
   end
 
   def update
-    if params[:shelf]
-      params[:shelf_id] = find_shelf_id 
-    elsif params[:interaction]
+    params[:shelf_id] = find_shelf_id if params[:shelf]
+
+    if params[:interaction]
       @fern.message_update(SentimentFacade.message_rating(params[:interaction]))
       @fern.save
       render json: FernSerializer.new(@fern)
