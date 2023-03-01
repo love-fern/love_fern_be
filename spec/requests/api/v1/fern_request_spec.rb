@@ -10,7 +10,7 @@ RSpec.describe 'ferns API endpoints' do
   describe 'happy path testing' do
     describe 'fern index' do
       let!(:ferns) { create_list(:fern, 3, shelf_id: shelf.id) }
-      before { get api_v1_user_ferns_path(user.id), headers: headers }
+      before { get api_v1_user_ferns_path(user.google_id), headers: headers }
 
       it 'sends all ferns for a user' do
         expect(response).to be_successful
