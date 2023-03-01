@@ -320,6 +320,19 @@ RSpec.describe 'ferns API endpoints' do
   end
 
   describe 'sad path testing' do
+    describe 'fern show' do
+      it 'will return an error if the fern does not exist' do
+        get api_v1_user_fern_path(user.google_id, 9999999999999999), headers: headers
+
+        expect(response).to_not be_successful
+
+        parsed_response = JSON.parse(response.body, symbolize_names: true)
+
+        expect(parsed_response[:message]).to eq('There was an error processing your request')
+        expect(parsed_response[:errors]).to eq(["Couldn't find Fern with 'id'=9999999999999999"])
+        expect(parsed_response[:status]).to eq("404")
+      end
+    end
     describe 'fern create' do
       it 'will not create fern if field is blank' do
         fern_params = {
