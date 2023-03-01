@@ -5,18 +5,18 @@ class Api::V1::Users::FernsController < ApplicationController
   end
 
   def show
-    options = { include: [:interactions, :user] }
+    options = { include: %i[interactions user] }
     render json: FernSerializer.new(Fern.find(params[:id]), options)
   end
 
   def create
-    user = User.find_by(google_id: params["user_id"])
-    shelf = user.shelves.find_by(name: params["shelf"])
+    user = User.find_by(google_id: params['user_id'])
+    shelf = user.shelves.find_by(name: params['shelf'])
     new_fern = shelf.ferns.new(fern_params)
     if new_fern.save
       render json: FernSerializer.new(new_fern)
     else
-      render json: ::ErrorsController.bad_request, status: 404
+      render json: ErrorSerializer.serialize(Error.new(new_fern.errors)), status: :unprocessable_entity
     end
   end
 
@@ -26,10 +26,11 @@ class Api::V1::Users::FernsController < ApplicationController
       fern.message_update(SentimentFacade.message_rating(params[:interaction]))
       fern.save
       render json: FernSerializer.new(fern)
-    elsif fern.update(fern_params)
-      render json: FernSerializer.new(Fern.update(update_params))
+    elsif fern.update(update_params)
+      fern.save
+      render json: FernSerializer.new(fern)
     else
-      render json: ::ErrorsController.bad_request, status: 404
+      render json: ErrorSerializer.serialize(Error.new(fern.errors)), status: :unprocessable_entity
     end
   end
 
@@ -40,7 +41,7 @@ class Api::V1::Users::FernsController < ApplicationController
   private
 
   def update_params
-    params.permit(:name, :shelf_id, :preferred_contact_method)
+    params.permit(:name, :shelf_id, :preferred_contact_method, :health)
   end
 
   def fern_params

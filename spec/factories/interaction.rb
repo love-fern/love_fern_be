@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :interaction do
     association :fern
-    evaluation { ["Positive", "Negative", "Neutral"].sample }
+    evaluation { %w[Positive Negative Neutral].sample }
   end
 end

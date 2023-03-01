@@ -1,5 +1,4 @@
 class ActivitiesFacade
-
   def self.random_activity
     json = ActivitiesService.random_activity
     activity_to_poro(json)
