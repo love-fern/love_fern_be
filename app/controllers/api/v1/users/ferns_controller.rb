@@ -38,6 +38,7 @@ class Api::V1::Users::FernsController < ApplicationController
 
   def destroy
     @fern.destroy
+    render json: FernSerializer.new(@fern)
   end
 
   private
