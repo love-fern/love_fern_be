@@ -72,7 +72,7 @@ RSpec.describe 'ferns API endpoints' do
       let!(:interaction2) { create(:interaction, fern_id: fern.id, created_at: Time.now - 2.days) }
       let!(:interaction3) { create(:interaction, fern_id: fern.id) }
       let!(:interaction4) { create(:interaction, fern_id: fern.id, created_at: Time.now - 3.days) }
-      before { get api_v1_user_fern_path(user, fern), headers: headers }
+      before { get api_v1_user_fern_path(user.google_id, fern.id), headers: headers }
 
       it 'sends one fern for a user' do
         expect(response).to be_successful
@@ -253,11 +253,12 @@ RSpec.describe 'ferns API endpoints' do
       it 'can update an existing fern' do
         shelf2 = create(:shelf, user_id: user.id)
 
-        fern_update_params = { shelf_id: shelf2.id,
+        fern_update_params = { shelf: shelf2.name,
                                name: 'Fernilicious',
                                preferred_contact_method: "Don't" }
 
-        patch api_v1_user_fern_path(user.id, fern.id), headers: headers, params: fern_update_params
+        patch api_v1_user_fern_path(user.google_id, fern.id), headers: headers, params: fern_update_params
+        
         updated_fern = Fern.find(fern.id)
 
         expect(response).to be_successful
@@ -269,7 +270,7 @@ RSpec.describe 'ferns API endpoints' do
       context 'interaction sent to sentiment api' do
         it 'can decrease the health and store a negative interaction', :vcr do
           interaction = 'Die in a dumpster fire you muffin boy.' # sentiment score: -0.8
-          patch api_v1_user_fern_path(user.id, fern.id), params: { interaction: interaction }, headers: headers
+          patch api_v1_user_fern_path(user.google_id, fern.id), params: { interaction: interaction }, headers: headers
           updated_fern = Fern.find(fern.id)
           # changed this spec to look for health decrease by 2
           expect(updated_fern.health).to eq(fern.health - 2)
@@ -281,7 +282,7 @@ RSpec.describe 'ferns API endpoints' do
 
         it 'can increase the health and store a positive interaction', :vcr do
           interaction = "I'm so pleased to make your acquaintance, muffin man." # sentiment score: 0.9
-          patch api_v1_user_fern_path(user.id, fern.id), params: { interaction: interaction }, headers: headers
+          patch api_v1_user_fern_path(user.google_id, fern.id), params: { interaction: interaction }, headers: headers
           updated_fern = Fern.find(fern.id)
 
           # changed this spec to look for health increase by 2
@@ -294,7 +295,7 @@ RSpec.describe 'ferns API endpoints' do
 
         it 'can leave health unchanged and store a neutral interaction', :vcr do
           interaction = 'Hello. I am a muffin. Eat me. Please and thank you.' # sentiment score: 0
-          patch api_v1_user_fern_path(user.id, fern.id), params: { interaction: interaction }, headers: headers
+          patch api_v1_user_fern_path(user.google_id, fern.id), params: { interaction: interaction }, headers: headers
           updated_fern = Fern.find(fern.id)
 
           expect(updated_fern.health).to eq(fern.health)
@@ -310,7 +311,7 @@ RSpec.describe 'ferns API endpoints' do
       it 'can delete a fern from the database' do
         expect(Fern.find(fern.id)).to eq(fern)
 
-        delete api_v1_user_fern_path(user.id, fern.id), headers: headers
+        delete api_v1_user_fern_path(user.google_id, fern.id), headers: headers
 
         expect(response).to be_successful
         expect { Fern.find(fern.id) }.to raise_error(ActiveRecord::RecordNotFound)
@@ -353,7 +354,7 @@ RSpec.describe 'ferns API endpoints' do
         fern_update_params = { shelf_id: shelf2.id,
                                name: '',
                                preferred_contact_method: "Don't" }
-        patch api_v1_user_fern_path(user.id, fern.id), headers: headers, params: fern_update_params
+        patch api_v1_user_fern_path(user.google_id, fern.id), headers: headers, params: fern_update_params
 
         updated_fern = Fern.find(fern.id)
 
@@ -376,7 +377,7 @@ RSpec.describe 'ferns API endpoints' do
     describe 'bad api key' do
       it 'returns 403 unauthorized' do
         headers = { 'HTTP_FERN_KEY' => 'not_the_key' }
-        get api_v1_user_fern_path(user, fern), headers: headers
+        get api_v1_user_fern_path(user.google_id, fern.id), headers: headers
 
         expect(response).to_not be_successful
         expect(response.status).to eq(403)
