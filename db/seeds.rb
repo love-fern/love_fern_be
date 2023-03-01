@@ -13,4 +13,6 @@ friend.ferns.create!({ name: 'Roshan', preferred_contact_method: 'phone', health
 friend.ferns.create!({ name: 'Nate', preferred_contact_method: 'email', health: 6 })
 business.ferns.create!({ name: 'Anthony', preferred_contact_method: 'text', health: 7 })
 business.ferns.create!({ name: 'Drew', preferred_contact_method: 'phone', health: 8 })
-business.ferns.create!({ name: 'Brady', preferred_contact_method: 'email', health: 9 })
+brady = business.ferns.create!({ name: 'Brady', preferred_contact_method: 'email', health: 9 })
+
+brady.interactions.create!({ evaluation: 'Positive' })
