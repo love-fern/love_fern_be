@@ -3,10 +3,12 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :activities, only: [:index]
-      resources :users, only: [:create, :update] do 
-        resources :ferns, controller: "users/ferns"
-        resources :shelves, only: [:index, :create, :update, :destroy], controller: "users/shelves"
+      resources :users, only: %i[create update] do
+        resources :ferns, controller: 'users/ferns'
+        resources :shelves, only: %i[index create update destroy], controller: 'users/shelves'
       end
     end
   end
+
+  get '/reset_seeds', to: 'application#reset_seeds'
 end
