@@ -15,6 +15,7 @@ We believe that strong relationships are the foundation of a happy and fulfillin
 [🧵 Back End Repository](https://github.com/love-fern/love_fern_be)
 
 ## Table of Contents
+
 - [🪴 Love Fern \[Back End\] 🪴](#-love-fern-back-end-)
   - [👋 Welcome to Love Fern!](#-welcome-to-love-fern)
   - [🔗 Links](#-links)
@@ -53,19 +54,19 @@ This is a Ruby on Rails application which establishes API endpoints to be called
 
 To install gems, run:
 
-```
+```bash
 bundle install
 ```
 
 Then to establish a database, run:
 
-```
+```bash
 rails db:create
 ```
 
 Because this is the back end repository, database migration is also necessary, run:
 
-```
+```bash
 rails db:migrate
 ```
 
@@ -77,7 +78,7 @@ Once `love_fern_be` is correctly installed, run tests locally to ensure the repo
 
 To test the entire spec suite, run:
 
-```
+```bash
 bundle exec rspec spec/
 ```
 
