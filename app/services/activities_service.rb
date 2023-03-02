@@ -1,6 +1,6 @@
 class ActivitiesService
   def self.random_activity
-    response = conn.get('activity?participants=2')
+    response = conn.get('activity')
     parse_json(response)
   end
 
