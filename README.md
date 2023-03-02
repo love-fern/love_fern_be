@@ -1,8 +1,35 @@
 # Love Fern (Back End)
 
-[IMAGE / GIF]
 
-Love Fern is an application that allows the user to cultivate their relationships with others in their lives, by taking care of a fern. This is the back end of the application, which will focus on ______________________________.
+## Table of Contents
+- [Love Fern (Back End)](#love-fern-back-end)
+  - [Table of Contents](#table-of-contents)
+  - [Description](#description)
+  - [Getting Started](#getting-started)
+    - [Installation](#installation)
+    - [RSpec Suite](#rspec-suite)
+    - [Calling APIs](#calling-apis)
+  - [Available Endpoints](#available-endpoints)
+    - [Create a New User](#create-a-new-user)
+    - [Return all ferns for user](#return-all-ferns-for-user)
+    - [Create a New Fern](#create-a-new-fern)
+    - [Return Single Fern (Fern Show)](#return-single-fern-fern-show)
+    - [Update Fern Status (Water Fern)](#update-fern-status-water-fern)
+    - [Update Fern Information \[Name / Shelf / Contact Method\]](#update-fern-information-name--shelf--contact-method)
+    - [Delete Fern](#delete-fern)
+    - [Get All Shelves \& Ferns](#get-all-shelves--ferns)
+    - [Get One Random Activity Suggestion](#get-one-random-activity-suggestion)
+  - [Goals](#goals)
+      - [Learning Goals (keep updated)](#learning-goals-keep-updated)
+      - [Future Goals](#future-goals)
+      - [Known Issues](#known-issues)
+  - [Database \& Schema](#database--schema)
+  - [Build Methods](#build-methods)
+  - [Authors \& Acknowledgments](#authors--acknowledgments)
+
+## Description
+
+Love Fern is an application that allows the user to cultivate their relationships with others in their lives, by taking care of a fern. This is the backend service of the application.
 
 ## Getting Started
 
@@ -38,9 +65,71 @@ All tests should be passing if installation is successful.
 
 - APIs can be called locally using a program like Postman. (link)
 
-## List of Endpoints (keep updated)
+## Available Endpoints
 
-- GET '/ferns?user_id={{user.id}}' Returns all ferns
+Note: Necessary parameters marked with {}
+
+### Create a New User
+Note: pass `name`, `google_id`, & `email` in request body
+
+```bash
+POST '/api/v1/users'
+```
+
+### Return all ferns for user
+
+```bash
+GET '/api/v1/users/{google_id}/ferns'
+```
+
+### Create a New Fern
+
+Note: pass `name`, `shelf`, & `preferred_contact_method` in request body
+
+```bash
+POST '/api/v1/users/{google_id}/ferns'
+```
+
+### Return Single Fern (Fern Show)
+
+```bash
+GET '/api/v1/users/{google_id}/ferns/{fern_id}'
+```
+
+### Update Fern Status (Water Fern) 
+
+Note: pass `interaction` as the message to be analyzed in response body 
+
+```bash
+PATCH '/api/v1/users/{google_id}/ferns/{fern_id}'
+```
+
+### Update Fern Information [Name / Shelf / Contact Method]
+
+Note: pass `name`, `shelf`, or `preferred_contact_method` in request body
+
+```bash
+PATCH '/api/v1/users/{google_id}/ferns/{fern_id}'
+```
+
+### Delete Fern
+
+```bash
+DELETE '/api/v1/users/{google_id}/ferns/{fern_id}'
+```
+
+### Get All Shelves & Ferns
+
+```bash
+GET '/api/v1/users/{google_id}/shelves'
+```
+
+### Get One Random Activity Suggestion
+
+```bash
+GET '/api/v1/activities'
+```
+
 ## Goals
 
 Love Fern was germinated to satisfy the requirements for a Turing Backend Mod 3 group project, Consultancy. Official project requirements can be read [here](https://backend.turing.edu/module3/projects/consultancy/).
