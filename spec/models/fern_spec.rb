@@ -91,4 +91,23 @@ RSpec.describe Fern do
       end
     end
   end
+
+  describe '#activity_update' do
+    context 'did activity with person' do
+      it 'sets health to 8' do
+        fern.health = 0
+        fern.activity_update('Play a game of tennis with a friend')
+
+        expect(fern.health).to eq(8)
+      end
+
+      it 'logs a positive interaction' do
+        fern.activity_update('Play a game of tennis with a friend')
+        last_activity = fern.interactions.last
+
+        expect(last_activity.description).to eq('Play a game of tennis with a friend')
+        expect(last_activity.evaluation).to eq('Positive')
+      end
+    end
+  end
 end

@@ -1,4 +1,3 @@
-# TODO: test json responses for fern update and delete
 require 'rails_helper'
 
 RSpec.describe 'ferns API endpoints' do
@@ -275,7 +274,7 @@ RSpec.describe 'ferns API endpoints' do
           # changed this spec to look for health decrease by 2
           expect(updated_fern.health).to eq(fern.health - 2)
 
-          interaction = Interaction.last
+          interaction = updated_fern.interactions.last
 
           expect(interaction.evaluation).to eq('Negative')
         end
@@ -288,7 +287,7 @@ RSpec.describe 'ferns API endpoints' do
           # changed this spec to look for health increase by 2
           expect(updated_fern.health).to eq(fern.health + 2)
 
-          interaction = Interaction.last
+          interaction = updated_fern.interactions.last
 
           expect(interaction.evaluation).to eq('Positive')
         end
@@ -300,9 +299,25 @@ RSpec.describe 'ferns API endpoints' do
 
           expect(updated_fern.health).to eq(fern.health)
 
-          interaction = Interaction.last
+          interaction = updated_fern.interactions.last
 
           expect(interaction.evaluation).to eq('Neutral')
+        end
+      end
+
+      context 'activity done with person' do
+        it 'sets fern health to 8 and stores activity' do
+          fern.health = 1
+          activity = 'Learn Javascript'
+          patch api_v1_user_fern_path(user.google_id, fern.id), params: { activity: activity }, headers: headers
+          updated_fern = Fern.find(fern.id)
+
+          expect(updated_fern.health).to eq(8)
+
+          interaction = updated_fern.interactions.last
+
+          expect(interaction.evaluation).to eq('Positive')
+          expect(interaction.description).to eq('Learn Javascript')
         end
       end
     end

@@ -9,6 +9,4 @@ Rails.application.routes.draw do
       end
     end
   end
-
-  get '/reset_seeds', to: 'application#reset_seeds'
 end
