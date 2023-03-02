@@ -6,10 +6,4 @@ class ErrorSerializer
       "status": error.status
     }
   end
-
-  def self.no_data
-    {
-      data: {}
-    }
-  end
 end
