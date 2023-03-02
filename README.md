@@ -1,8 +1,23 @@
-# Love Fern (Back End)
+# 🪴 Love Fern [Back End] 🪴
 
+## 👋 Welcome to Love Fern!
+
+We believe that strong relationships are the foundation of a happy and fulfilling life. That's why we've created a tool that empowers you to build and maintain meaningful connections with the people you care about most. Try Love Fern today and see how it can transform your relationships!
+
+## 🔗 Links
+
+[⚡️ Production Website](https://www.lovefern.app)
+
+[🔌 Fernando (Our Backend Service)](https://fernando.herokuapp.com)
+
+[🪡 Front End Repository](https://github.com/love-fern/love_fern_fe)
+
+[🧵 Back End Repository](https://github.com/love-fern/love_fern_be)
 
 ## Table of Contents
-- [Love Fern (Back End)](#love-fern-back-end)
+- [🪴 Love Fern \[Back End\] 🪴](#-love-fern-back-end-)
+  - [👋 Welcome to Love Fern!](#-welcome-to-love-fern)
+  - [🔗 Links](#-links)
   - [Table of Contents](#table-of-contents)
   - [Description](#description)
   - [Getting Started](#getting-started)
@@ -20,9 +35,9 @@
     - [Get All Shelves \& Ferns](#get-all-shelves--ferns)
     - [Get One Random Activity Suggestion](#get-one-random-activity-suggestion)
   - [Goals](#goals)
-      - [Learning Goals (keep updated)](#learning-goals-keep-updated)
-      - [Future Goals](#future-goals)
-      - [Known Issues](#known-issues)
+    - [Learning Goals](#learning-goals)
+    - [Future Goals](#future-goals)
+    - [Known Issues](#known-issues)
   - [Database \& Schema](#database--schema)
   - [Build Methods](#build-methods)
   - [Authors \& Acknowledgments](#authors--acknowledgments)
@@ -33,44 +48,52 @@ Love Fern is an application that allows the user to cultivate their relationship
 
 ## Getting Started
 
-This is a Ruby on Rails application which establishes API endpoints to be called in the `love_fern_fe` repository. To run the entire application locally, both repositories will need to be cloned and set up.
+This is a Ruby on Rails application which establishes API endpoints to be called in the `love_fern_fe` repository. To run the application locally, both frontend and backend repositories will need to be cloned and set up.
 
 ### Installation
 
 To install gems, run:
+
 ```
 bundle install
 ```
+
 Then to establish a database, run:
+
 ```
 rails db:create
 ```
+
 Because this is the back end repository, database migration is also necessary, run:
+
 ```
 rails db:migrate
 ```
+
 Inspect the `/db/schema.rb` and compare to the 'Schema' section below to ensure this migration has been done successfully.
 
 ### RSpec Suite
 
-Once `love_fern_be` is correctly installed, run tests to ensure the repository works as intended locally.
+Once `love_fern_be` is correctly installed, run tests locally to ensure the repository works as intended.
 
 To test the entire spec suite, run:
+
 ```
 bundle exec rspec spec/
 ```
+
 All tests should be passing if installation is successful.
 
 ### Calling APIs
 
-- APIs can be called locally using a program like Postman. (link)
+- APIs can be called locally using a program like [Postman](https://www.postman.com). 
 
 ## Available Endpoints
 
-Note: Necessary parameters marked with {}
+*Note:* Necessary parameters marked with {}
 
 ### Create a New User
-Note: pass `name`, `google_id`, & `email` in request body
+*Note:* pass `name`, `google_id`, & `email` in request body
 
 ```bash
 POST '/api/v1/users'
@@ -84,7 +107,7 @@ GET '/api/v1/users/{google_id}/ferns'
 
 ### Create a New Fern
 
-Note: pass `name`, `shelf`, & `preferred_contact_method` in request body
+*Note:* pass `name`, `shelf`, & `preferred_contact_method` in request body
 
 ```bash
 POST '/api/v1/users/{google_id}/ferns'
@@ -98,7 +121,7 @@ GET '/api/v1/users/{google_id}/ferns/{fern_id}'
 
 ### Update Fern Status (Water Fern) 
 
-Note: pass `interaction` as the message to be analyzed in response body 
+*Note:* pass `interaction` as the message to be analyzed in response body 
 
 ```bash
 PATCH '/api/v1/users/{google_id}/ferns/{fern_id}'
@@ -106,7 +129,7 @@ PATCH '/api/v1/users/{google_id}/ferns/{fern_id}'
 
 ### Update Fern Information [Name / Shelf / Contact Method]
 
-Note: pass `name`, `shelf`, or `preferred_contact_method` in request body
+*Note:* pass `name`, `shelf`, or `preferred_contact_method` in request body
 
 ```bash
 PATCH '/api/v1/users/{google_id}/ferns/{fern_id}'
@@ -132,25 +155,27 @@ GET '/api/v1/activities'
 
 ## Goals
 
-Love Fern was germinated to satisfy the requirements for a Turing Backend Mod 3 group project, Consultancy. Official project requirements can be read [here](https://backend.turing.edu/module3/projects/consultancy/).
-#### Learning Goals (keep updated)
-- Design API endpoints so as to be easily digestible on the front end.
-- Explore how Open Authorization on the front end interacts with database access on the back end.
-- Building a full-scale application from scratch using service-oriented architecture.
-- Interact with two unique external APIs.
-#### Future Goals
+Love Fern was germinated to satisfy the requirements (and beyond) for a Turing Backend Mod 3 group project, **Consultancy**. See official [project requirements](https://backend.turing.edu/module3/projects/consultancy/).
 
-- Implement "watering frequency," which indicates how often a user wishes to interact with their fern before it starts to decay.
-- Add more detailed stats to the fern show page, including time since last contact and information about the nature of that contact.
+### Learning Goals
+
+- Design easily consumable API end-points to create accessible, robust backend service.
+- Implement a secure connection between front and backend services deployed to Heroku. 
+- Interact with two unique external APIs with efficient data processing and caching.
+
+### Future Goals
+
+- Implement "Soil Moisture" which indicates how often a user wishes to interact with their fern before the soil is completely dry.
 - Add the ability to search for a fern by name and order ferns by health.
 - Suggest multiple activities and gestures corresponding to varying levels of care needed for the fern.
-- Build out the fern health algorithm to incorporate activities and gifts, as well as a more nuanced interpretation of Google's sentiment analysis.
-#### Known Issues
+- Implement a homegrown sentiment analysis feature to pair with Google's services, eventually reducing dependence on external services.
 
-- In its current state, Love Fern's backend API is not private. Future goals are to require a private token that only the Love Fern frontend will have. Until then, please do not provide any information you deem sensitive.
-- The fertilize feature currently suggests a random activity to do with your fern's person. Please consider real life consequences are not our responsibility if you do ask your fern's person to do this activity.
+### Known Issues
+
 
 ## Database & Schema
+
+[Insert DB Schema Image Here]
 
 ## Build Methods
 
