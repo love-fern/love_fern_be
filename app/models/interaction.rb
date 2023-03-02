@@ -3,4 +3,5 @@ class Interaction < ApplicationRecord
   validates :evaluation,
             presence: true,
             inclusion: { in: %w[Positive Negative Neutral] }
+  validates :description, presence: true
 end
