@@ -15,4 +15,4 @@ business.ferns.create!({ name: 'Anthony', preferred_contact_method: 'text', heal
 business.ferns.create!({ name: 'Drew', preferred_contact_method: 'phone', health: 8 })
 brady = business.ferns.create!({ name: 'Brady', preferred_contact_method: 'email', health: 9 })
 
-brady.interactions.create!({ evaluation: 'Positive' })
+brady.interactions.create!({ evaluation: 'Positive', description: 'message' })
