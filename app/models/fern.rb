@@ -10,14 +10,19 @@ class Fern < ApplicationRecord
   def message_update(rating)
     if rating > THRESHOLD
       self.health += 2 if health < 10
-      interactions.create(evaluation: 'Positive')
+      interactions.create(evaluation: 'Positive', description: 'message')
     elsif rating < THRESHOLD * -1
       self.health -= 2 if self.health > 0
-      interactions.create(evaluation: 'Negative')
+      interactions.create(evaluation: 'Negative', description: 'message')
     else
-      interactions.create(evaluation: 'Neutral')
+      interactions.create(evaluation: 'Neutral', description: 'message')
     end
     health_limits
+  end
+
+  def activity_update(activity)
+    self.health = 8
+    interactions.create(evaluation: 'Positive', description: activity)
   end
 
   private
