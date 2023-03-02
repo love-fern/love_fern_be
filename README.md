@@ -39,7 +39,6 @@ We believe that strong relationships are the foundation of a happy and fulfillin
     - [Future Goals](#future-goals)
     - [Known Issues](#known-issues)
   - [Database \& Schema](#database--schema)
-  - [Build Methods](#build-methods)
   - [Authors \& Acknowledgments](#authors--acknowledgments)
 
 ## Description
@@ -172,12 +171,12 @@ Love Fern was germinated to satisfy the requirements (and beyond) for a Turing B
 
 ### Known Issues
 
+- In current state, sentiment analysis has linear affect on fern status.
+- No automated system for generating secret keys to authenticate new FE services. 
 
 ## Database & Schema
 
 [Insert DB Schema Image Here]
-
-## Build Methods
 
 ## Authors & Acknowledgments
 
