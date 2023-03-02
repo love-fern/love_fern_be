@@ -5,7 +5,7 @@ class Fern < ApplicationRecord
 
   validates_presence_of :name, :health, :preferred_contact_method, :shelf_id
 
-  THRESHOLD = 0
+  THRESHOLD = 0.35
 
   def message_update(rating)
     if rating > THRESHOLD
