@@ -176,7 +176,7 @@ Love Fern was germinated to satisfy the requirements (and beyond) for a Turing B
 
 ## Database & Schema
 
-[Insert DB Schema Image Here]
+![screenshot_2023-03-02_at_9 28 56_am_480](https://user-images.githubusercontent.com/43623494/222551163-1998f69c-f610-413c-8db0-ce8d48ff6db1.png)
 
 ## Authors & Acknowledgments
 
