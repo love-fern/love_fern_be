@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe Fern do
   let(:fern) { create(:fern) }
-  let(:upper_threshold) { Fern::THRESHOLD }
-  let(:lower_threshold) { Fern::THRESHOLD * -1 }
+  let(:upper_threshold) { Fern::NEUTRAL_THRESHOLD }
+  let(:lower_threshold) { Fern::NEUTRAL_THRESHOLD * -1 }
 
   describe 'relationships' do
     it { should belong_to(:shelf) }
@@ -23,17 +23,22 @@ RSpec.describe Fern do
   describe '#message_update' do
     context 'receives rating from google sentiment api' do
       context 'fern health' do
-        # updated these specs to show health increases by 2
-        it 'increases if rating is above threshold' do
-          fern.message_update(upper_threshold + 0.1)
+        it 'increases for positive rating' do
+          rating = 0.7
+          expected_health_change = rating*Fern::HEALTH_MESSAGE_RATIO
 
-          expect(fern.health).to eq(9)
+          expect { 
+            fern.message_update(rating) 
+          }.to change(fern, :health).by(expected_health_change)
         end
 
-        it 'decreases if rating is below threshold' do
-          fern.message_update(lower_threshold - 0.1)
+        it 'decreases for negative rating' do
+          rating = -0.7
+          expected_health_change = rating*Fern::HEALTH_MESSAGE_RATIO
 
-          expect(fern.health).to eq(5)
+          expect { 
+            fern.message_update(rating) 
+          }.to change(fern, :health).by(expected_health_change)
         end
 
         it 'does not change if within or equal to threshold' do
@@ -52,41 +57,35 @@ RSpec.describe Fern do
 
         it 'will not go below 0' do
           fern.health = 1
-          fern.message_update(lower_threshold - 0.1)
+          fern.message_update(-1)
 
           expect(fern.health).to eq(0)
 
-          fern.message_update(lower_threshold - 34)
+          fern.message_update(-99)
 
           expect(fern.health).to eq(0)
         end
 
         it 'will not go above 10' do
           fern.health = 9
-          fern.message_update(upper_threshold + 0.1)
+          fern.message_update(1)
 
           expect(fern.health).to eq(10)
 
-          fern.message_update(upper_threshold + 34)
+          fern.message_update(99)
 
           expect(fern.health).to eq(10)
         end
       end
 
       context 'interaction creation' do
-        it 'creates a positive interaction entry' do
-          fern.message_update(upper_threshold + 0.1)
-          expect(Interaction.last.evaluation).to eq('Positive')
-        end
-
-        it 'creates a negative interaction entry' do
-          fern.message_update(lower_threshold - 0.1)
-          expect(Interaction.last.evaluation).to eq('Negative')
-        end
-
-        it 'creates a neutral interaction entry' do
+        it 'stores the sentiment analysis rating' do
+          fern.message_update(0.75)
+          expect(Interaction.last.evaluation).to eq(0.75)
+          fern.message_update(-0.75)
+          expect(Interaction.last.evaluation).to eq(-0.75)
           fern.message_update(0)
-          expect(Interaction.last.evaluation).to eq('Neutral')
+          expect(Interaction.last.evaluation).to eq(0)
         end
       end
     end
@@ -94,19 +93,19 @@ RSpec.describe Fern do
 
   describe '#activity_update' do
     context 'did activity with person' do
-      it 'sets health to 8' do
+      it 'increases health by 4' do
         fern.health = 0
         fern.activity_update('Play a game of tennis with a friend')
 
-        expect(fern.health).to eq(8)
+        expect(fern.health).to eq(4)
       end
 
-      it 'logs a positive interaction' do
-        fern.activity_update('Play a game of tennis with a friend')
+      it 'stores the activity' do
+        fern.activity_update("Solve a Rubik's cube")
         last_activity = fern.interactions.last
 
-        expect(last_activity.description).to eq('Play a game of tennis with a friend')
-        expect(last_activity.evaluation).to eq('Positive')
+        expect(last_activity.description).to eq("Solve a Rubik's cube")
+        expect(last_activity.evaluation).to be_nil
       end
     end
   end
