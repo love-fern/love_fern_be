@@ -96,11 +96,11 @@ POST '/api/v1/users'
 ```
 
 Response:
-```json
+```bash
 {
   "data":
   {
-    "id":USER_ID,
+    "id":"USER_ID",
     "type":"user",
     "attributes":
     {
@@ -118,7 +118,7 @@ GET '/api/v1/users/{google_id}/ferns'
 ```
 
 Response:
-```json
+```bash
 {
   "data":
   [{
@@ -169,7 +169,7 @@ POST '/api/v1/users/{google_id}/ferns'
 ```
 
 Response:
-```json
+```bash
 {
   "data":
   {
@@ -215,7 +215,7 @@ GET '/api/v1/users/{google_id}/ferns/{fern_id}'
 ```
 
 Response:
-```json
+```bash
 {
   "data":
   {
@@ -299,7 +299,7 @@ PATCH '/api/v1/users/{google_id}/ferns/{fern_id}'
 ```
 
 Response:
-```json
+```bash
 {
   "data":
   {
@@ -359,7 +359,7 @@ DELETE '/api/v1/users/{google_id}/ferns/{fern_id}'
 ```
 
 Response:
-```json
+```bash
 {
   "data":
   {
@@ -405,7 +405,7 @@ GET '/api/v1/users/{google_id}/shelves'
 ```
 
 Response:
-```json
+```bash
 {
   "data":
   [{
@@ -447,7 +447,7 @@ GET '/api/v1/activities'
 
 Response:
 
-```json
+```bash
 {
   "activity":"RANDOM_ACTIVITY"
 }
