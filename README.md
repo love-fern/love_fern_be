@@ -16,31 +16,27 @@ We believe that strong relationships are the foundation of a happy and fulfillin
 
 ## Table of Contents
 
-- [🪴 Love Fern \[Back End\] 🪴](#-love-fern-back-end-)
-  - [👋 Welcome to Love Fern!](#-welcome-to-love-fern)
-  - [🔗 Links](#-links)
-  - [Table of Contents](#table-of-contents)
-  - [Description](#description)
-  - [Getting Started](#getting-started)
-    - [Installation](#installation)
-    - [RSpec Suite](#rspec-suite)
-    - [Calling APIs](#calling-apis)
-  - [Available Endpoints](#available-endpoints)
-    - [Create a New User](#create-a-new-user)
-    - [Return all ferns for user](#return-all-ferns-for-user)
-    - [Create a New Fern](#create-a-new-fern)
-    - [Return Single Fern (Fern Show)](#return-single-fern-fern-show)
-    - [Update Fern Status (Water Fern)](#update-fern-status-water-fern)
-    - [Update Fern Information \[Name / Shelf / Contact Method\]](#update-fern-information-name--shelf--contact-method)
-    - [Delete Fern](#delete-fern)
-    - [Get All Shelves \& Ferns](#get-all-shelves--ferns)
-    - [Get One Random Activity Suggestion](#get-one-random-activity-suggestion)
-  - [Goals](#goals)
-    - [Learning Goals](#learning-goals)
-    - [Future Goals](#future-goals)
-    - [Known Issues](#known-issues)
-  - [Database \& Schema](#database--schema)
-  - [Authors \& Acknowledgments](#authors--acknowledgments)
+- [Description](#description)
+- [Getting Started](#getting-started)
+  - [Installation](#installation)
+  - [RSpec Suite](#rspec-suite)
+  - [Calling APIs](#calling-apis)
+- [Available Endpoints](#available-endpoints)
+  - [Create a New User](#create-a-new-user)
+  - [Return all ferns for user](#return-all-ferns-for-user)
+  - [Create a New Fern](#create-a-new-fern)
+  - [Return Single Fern (Fern Show)](#return-single-fern-fern-show)
+  - [Update Fern Status (Water Fern)](#update-fern-status-water-fern)
+  - [Update Fern Information \[Name / Shelf / Contact Method\]](#update-fern-information-name--shelf--contact-method)
+  - [Delete Fern](#delete-fern)
+  - [Get All Shelves \& Ferns](#get-all-shelves--ferns)
+  - [Get One Random Activity Suggestion](#get-one-random-activity-suggestion)
+- [Goals](#goals)
+  - [Learning Goals](#learning-goals)
+  - [Future Goals](#future-goals)
+  - [Known Issues](#known-issues)
+- [Database \& Schema](#database--schema)
+- [Authors \& Acknowledgments](#authors--acknowledgments)
 
 ## Description
 
@@ -48,7 +44,7 @@ Love Fern is an application that allows the user to cultivate their relationship
 
 ## Getting Started
 
-This is a Ruby on Rails application which establishes API endpoints to be called in the `love_fern_fe` repository. To run the application locally, both frontend and backend repositories will need to be cloned and set up.
+This is a Ruby on Rails application which establishes API endpoints to be called in the `love_fern_fe` repository. To run the application locally, both frontend and backend repositories will need to be cloned and set up fully with required gems and environment variables.
 
 ### Installation
 
@@ -99,10 +95,69 @@ All tests should be passing if installation is successful.
 POST '/api/v1/users'
 ```
 
+Response:
+```bash
+{
+  "data":
+  {
+    "id":"USER_ID",
+    "type":"user",
+    "attributes":
+    {
+      "name":"USER_NAME",
+      "email":"USER_EMAIL",
+      "google_id":"USER_GOOGLE_ID"
+    }
+  }
+}
+```
 ### Return all ferns for user
 
 ```bash
 GET '/api/v1/users/{google_id}/ferns'
+```
+
+Response:
+```bash
+{
+  "data":
+  [{
+    "id":"FERN_ID",
+    "type":"fern",
+    "attributes":
+    {
+      "name":"FERN_NAME",
+      "health":FERN_HEALTH,
+      "preferred_contact_method":"FERN_CONTACT_METHOD"
+    },
+    "relationships":
+    {
+      "shelf":
+      {
+        "data":
+        {
+          "id":"SHELF_ID",
+          "type":"shelf"
+        }
+      },
+      "user":
+      {
+        "data":
+        {
+          "id":"USER_ID",
+          "type":"user"
+        }
+      },
+      "interactions":
+      {
+        "data":
+        [...]
+      }
+    }
+  },
+  ...
+  ]
+}
 ```
 
 ### Create a New Fern
@@ -113,10 +168,126 @@ GET '/api/v1/users/{google_id}/ferns'
 POST '/api/v1/users/{google_id}/ferns'
 ```
 
+Response:
+```bash
+{
+  "data":
+  {
+    "id":"FERN_ID",
+    "type":"fern",
+    "attributes":
+    {
+      "name":"FERN_NAME",
+      "health":7, **DEFAULT IS 7**
+      "preferred_contact_method":"FERN_CONTACT_METHOD"
+    },
+    "relationships":
+    {
+      "shelf":
+      {
+        "data":
+        {
+          "id":"SHELF_ID",
+          "type":"shelf"
+        }
+      },
+    "user":
+    {
+      "data":
+      {
+        "id":"USER_ID",
+        "type":"user"
+      }
+    },
+    "interactions":{
+      "data":
+        []
+      }
+    }
+  }
+}
+```
+
 ### Return Single Fern (Fern Show)
 
 ```bash
 GET '/api/v1/users/{google_id}/ferns/{fern_id}'
+```
+
+Response:
+```bash
+{
+  "data":
+  {
+    "id":"9",
+    "type":"fern",
+    "attributes":
+    {
+      "name":"FERN_NAME",
+      "health":FERN_HEALTH,
+      "preferred_contact_method":"FERN_CONTACT_METHOD"
+    },
+    "relationships":
+    {
+      "shelf":
+      {
+        "data":
+        {
+          "id":"SHELF_ID",
+          "type":"shelf"
+        }
+      },
+      "user":
+      {
+        "data":
+        {
+          "id":"USER_ID",
+          "type":"user"
+        }
+      },
+      "interactions":
+      {
+        "data":
+        [{
+          "id":"INTERACTION_ID",
+          "type":"interaction"
+          }]
+      }
+    }
+  },
+  "included":
+  [{
+    "id":"INTERACTION_ID",
+    "type":"interaction",
+    "attributes":
+    {
+      "evaluation":"Positive",
+      "description":"message",
+      "created_at":"DATETIME"
+    },
+    "relationships":
+    {
+      "fern":
+      {
+        "data":
+        {
+          "id":"FERN_ID",
+          "type":"fern"
+        }
+      }
+    }
+    },
+    {
+      "id":"USER_ID",
+      "type":"user",
+      "attributes":
+      {
+        "name":"USER_NAME",
+        "email":"USER_EMAIL",
+        "google_id":"USER_GOOGLE_ID"
+      }
+    }]
+}
 ```
 
 ### Update Fern Status (Water Fern) 
@@ -125,6 +296,52 @@ GET '/api/v1/users/{google_id}/ferns/{fern_id}'
 
 ```bash
 PATCH '/api/v1/users/{google_id}/ferns/{fern_id}'
+```
+
+Response:
+```bash
+{
+  "data":
+  {
+    "id":"FERN_ID",
+    "type":"fern",
+    "attributes":
+    {
+      "name":"FERN_NAME",
+      "health":FERN_HEALTH,
+      "preferred_contact_method":"FERN_CONTACT_METHOD"
+    },
+    "relationships":
+    {
+      "shelf":
+      {
+        "data":
+        {
+          "id":"SHELF_ID",
+          "type":"shelf"
+        }
+      },
+      "user":
+      {
+        "data":
+        {
+          "id":"USER_ID",
+          "type":"user"
+        }
+      },
+      "interactions":
+      {
+        "data":
+        [{
+          "id":"INTERACTION_ID",
+          "type":"interaction"
+        },
+        ...
+        ]
+      }
+    }
+  }
+}
 ```
 
 ### Update Fern Information [Name / Shelf / Contact Method]
@@ -141,16 +358,99 @@ PATCH '/api/v1/users/{google_id}/ferns/{fern_id}'
 DELETE '/api/v1/users/{google_id}/ferns/{fern_id}'
 ```
 
+Response:
+```bash
+{
+  "data":
+  {
+    "id":"FERN_ID",
+    "type":"fern",
+    "attributes":
+    {
+      "name":"FERN_NAME",
+      "health":FERN_HEALTH,
+      "preferred_contact_method":"FERN_CONTACT_METHOD"
+    },
+    "relationships":
+    {
+      "shelf":
+      {
+        "data":
+        {
+          "id":"SHELF_ID",
+          "type":"shelf"
+        }
+      },
+      "user":
+      {
+        "data":
+        {
+          "id":"USER_ID",
+          "type":"user"
+        }
+      },
+      "interactions":
+      {
+        "data":[]
+      }
+    }
+  }
+}
+```
+
 ### Get All Shelves & Ferns
 
 ```bash
 GET '/api/v1/users/{google_id}/shelves'
 ```
 
+Response:
+```bash
+{
+  "data":
+  [{
+    "id":"SHELF_ID",
+    "type":"shelf",
+    "attributes":
+    {
+      "name":"SHELF_NAME"
+    },
+    "relationships":
+    {
+      "user":
+      {
+        "data":
+        {
+          "id":"USER_ID",
+          "type":"user"
+        }
+      },
+      "ferns":
+      {
+        "data":
+        [{
+          "id":"FERN_ID",
+          "type":"fern"
+        },
+        ...
+        ]}
+      }
+    },
+    ...]
+}
+```
 ### Get One Random Activity Suggestion
 
 ```bash
 GET '/api/v1/activities'
+```
+
+Response:
+
+```bash
+{
+  "activity":"RANDOM_ACTIVITY"
+}
 ```
 
 ## Goals
@@ -165,7 +465,7 @@ Love Fern was germinated to satisfy the requirements (and beyond) for a Turing B
 
 ### Future Goals
 
-- Implement "Soil Moisture" which indicates how often a user wishes to interact with their fern before the soil is completely dry.
+- Implement "Soil Moisture" which indicates how often a user wishes to interact with their fern before the soil is completely dry. Dry soil will reduce the plant health until it is watered again.
 - Add the ability to search for a fern by name and order ferns by health.
 - Suggest multiple activities and gestures corresponding to varying levels of care needed for the fern.
 - Implement a homegrown sentiment analysis feature to pair with Google's services, eventually reducing dependence on external services.
