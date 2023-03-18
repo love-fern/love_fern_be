@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :shelf do
     association :user
-    name { Faker::Space.planet }
+    name { Faker::Lorem.unique.word }
   end
 end
