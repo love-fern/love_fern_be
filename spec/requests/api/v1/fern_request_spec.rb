@@ -35,7 +35,7 @@ RSpec.describe 'ferns API endpoints' do
           expect(fern[:attributes][:name]).to eq(ferns[i].name)
 
           expect(fern[:attributes]).to have_key(:health)
-          expect(fern[:attributes][:health]).to be_a(Integer)
+          expect(fern[:attributes][:health]).to be_a(Float)
           expect(fern[:attributes][:health]).to eq(ferns[i].health)
 
           expect(fern[:attributes]).to have_key(:preferred_contact_method)
@@ -96,7 +96,7 @@ RSpec.describe 'ferns API endpoints' do
         expect(fern_response[:attributes][:name]).to eq(fern.name)
 
         expect(fern_response[:attributes]).to have_key(:health)
-        expect(fern_response[:attributes][:health]).to be_a(Integer)
+        expect(fern_response[:attributes][:health]).to be_a(Float)
         expect(fern_response[:attributes][:health]).to eq(fern.health)
 
         expect(fern_response[:attributes]).to have_key(:preferred_contact_method)
@@ -227,7 +227,7 @@ RSpec.describe 'ferns API endpoints' do
         expect(fern_response[:attributes][:name]).to eq(fern_params[:name])
 
         expect(fern_response[:attributes]).to have_key(:health)
-        expect(fern_response[:attributes][:health]).to be_a(Integer)
+        expect(fern_response[:attributes][:health]).to be_a(Float)
         expect(fern_response[:attributes][:health]).to eq(7)
 
         expect(fern_response[:attributes]).to have_key(:preferred_contact_method)
@@ -271,12 +271,12 @@ RSpec.describe 'ferns API endpoints' do
           interaction = 'Die in a dumpster fire you muffin boy.' # sentiment score: -0.8
           patch api_v1_user_fern_path(user.google_id, fern.id), params: { interaction: interaction }, headers: headers
           updated_fern = Fern.find(fern.id)
-          # changed this spec to look for health decrease by 2
-          expect(updated_fern.health).to eq(fern.health - 2)
+
+          expect(updated_fern.health).to eq(fern.health - 2.4)
 
           interaction = updated_fern.interactions.last
 
-          expect(interaction.evaluation).to eq('Negative')
+          expect(interaction.evaluation).to eq(-0.8)
         end
 
         it 'can increase the health and store a positive interaction', :vcr do
@@ -285,11 +285,11 @@ RSpec.describe 'ferns API endpoints' do
           updated_fern = Fern.find(fern.id)
 
           # changed this spec to look for health increase by 2
-          expect(updated_fern.health).to eq(fern.health + 2)
+          expect(updated_fern.health).to eq(fern.health + 2.7)
 
           interaction = updated_fern.interactions.last
 
-          expect(interaction.evaluation).to eq('Positive')
+          expect(interaction.evaluation).to eq(0.9)
         end
 
         it 'can leave health unchanged and store a neutral interaction', :vcr do
@@ -301,22 +301,22 @@ RSpec.describe 'ferns API endpoints' do
 
           interaction = updated_fern.interactions.last
 
-          expect(interaction.evaluation).to eq('Neutral')
+          expect(interaction.evaluation).to eq(0)
         end
       end
 
       context 'activity done with person' do
-        it 'sets fern health to 8 and stores activity' do
-          fern.health = 1
+        it 'increases fern health by 4 and stores activity' do
+          fern.update(health: 1)
           activity = 'Learn Javascript'
           patch api_v1_user_fern_path(user.google_id, fern.id), params: { activity: activity }, headers: headers
           updated_fern = Fern.find(fern.id)
 
-          expect(updated_fern.health).to eq(8)
+          expect(updated_fern.health).to eq(5)
 
           interaction = updated_fern.interactions.last
 
-          expect(interaction.evaluation).to eq('Positive')
+          expect(interaction.evaluation).to be_nil
           expect(interaction.description).to eq('Learn Javascript')
         end
       end
