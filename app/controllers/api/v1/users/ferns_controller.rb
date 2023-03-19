@@ -25,15 +25,12 @@ class Api::V1::Users::FernsController < ApplicationController
     params[:shelf_id] = find_shelf_id if params[:shelf]
     if params[:interaction]
       @fern.message_update(SentimentFacade.message_rating(params[:interaction]))
-      @fern.save
       options = { include: [:interactions] }
       render json: FernSerializer.new(@fern, options)
     elsif params[:activity]
       @fern.activity_update(params[:activity])
-      @fern.save
       render json: FernSerializer.new(@fern)
     elsif @fern.update(update_params)
-      @fern.save
       render json: FernSerializer.new(@fern)
     else
       render json: ErrorSerializer.serialize(Error.new(@fern.errors)), status: :unprocessable_entity
