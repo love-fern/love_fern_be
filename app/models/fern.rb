@@ -26,7 +26,7 @@ class Fern < ApplicationRecord
   end
 
   def health_history
-    versions.where(event: "update").map { |fern| fern.changeset["health"][0] } << versions.last.changeset["health"][1]
+    versions.filter_map { |version| version.changeset["health"][0] if version.changeset["health"] } << versions.last.changeset["health"][1]
   end
 
   private
