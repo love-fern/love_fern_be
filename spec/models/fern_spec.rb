@@ -109,4 +109,24 @@ RSpec.describe Fern do
       end
     end
   end
+
+  describe '#health_history' do
+    it 'returns an array of health history' do
+      fern = create(:fern)
+
+      fern.message_update(1)
+      fern.message_update(0.5)
+      fern.message_update(-1)
+      fern.message_update(-0.5)
+      fern.message_update(-1)
+      fern.message_update(-1)
+      fern.message_update(-1)
+      fern.message_update(-1)
+      fern.message_update(0.5)
+
+      binding.pry
+
+      expect(fern.health_history).to eq([7.0, 10.0, 7.0, 5.5, 2.5, 0.0, 1.5])
+    end
+  end
 end

@@ -25,6 +25,10 @@ class Fern < ApplicationRecord
     self.update(health: health + 4)
   end
 
+  def health_history
+    versions.where(event: "update").map { |fern| fern.changeset["health"][0] } << versions.last.changeset["health"][1]
+  end
+
   private
 
   def health_limits
