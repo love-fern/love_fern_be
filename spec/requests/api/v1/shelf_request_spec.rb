@@ -171,14 +171,14 @@ RSpec.describe 'shelves API endpoints' do
       shelf_id = shelf1.id
 
       shelf_params = {
-        name: '',
+        name: "",
         user_id: user1.id
       }
 
       headers = { 'CONTENT_TYPE' => 'application/json', 'HTTP_FERN_KEY' => ENV['FERN_KEY'] }
 
       patch api_v1_user_shelf_path(user1, shelf1), headers: headers, params: JSON.generate(shelf: shelf_params)
-
+# binding.pry
       expect(response).to_not be_successful
       parsed_response = JSON.parse(response.body, symbolize_names: true)
 

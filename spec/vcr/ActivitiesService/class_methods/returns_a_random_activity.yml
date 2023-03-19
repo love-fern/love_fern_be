@@ -31,15 +31,15 @@ http_interactions:
       Content-Type:
       - application/json; charset=utf-8
       Content-Length:
-      - '138'
+      - '185'
       Etag:
-      - W/"8a-MtTpA5zJU3NtjUui+IJ2t7njp0k"
+      - W/"b9-1oxV7mbxydb0zdPPmwlJCx/t3FM"
       Date:
-      - Tue, 28 Feb 2023 23:26:33 GMT
+      - Sat, 18 Mar 2023 21:36:29 GMT
       Via:
       - 1.1 vegur
     body:
       encoding: UTF-8
-      string: '{"activity":"Buy a new house decoration","type":"recreational","participants":1,"price":0.4,"link":"","key":"3456114","accessibility":0.3}'
-  recorded_at: Tue, 28 Feb 2023 23:26:33 GMT
+      string: '{"activity":"Learn how to use a french press","type":"recreational","participants":1,"price":0.3,"link":"https://en.wikipedia.org/wiki/French_press","key":"4522866","accessibility":0.3}'
+  recorded_at: Sat, 18 Mar 2023 21:36:29 GMT
 recorded_with: VCR 6.1.0

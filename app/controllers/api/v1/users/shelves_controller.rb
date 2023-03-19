@@ -1,6 +1,7 @@
 class Api::V1::Users::ShelvesController < ApplicationController
   def create
-    new_shelf = Shelf.new(shelf_params)
+    user = User.find_by_id(params[:user_id])
+    new_shelf = user.shelves.new(shelf_params)
     if new_shelf.save
       render json: ShelfSerializer.new(new_shelf)
     else

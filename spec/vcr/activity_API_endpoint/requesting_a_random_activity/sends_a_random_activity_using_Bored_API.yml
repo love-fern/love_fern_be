@@ -31,15 +31,15 @@ http_interactions:
       Content-Type:
       - application/json; charset=utf-8
       Content-Length:
-      - '130'
+      - '120'
       Etag:
-      - W/"82-KMvPHiVV22dD2LIGFYF4sWsF714"
+      - W/"78-EvwzXN8StKB3OvOr9+ik8X19ZZE"
       Date:
-      - Tue, 28 Feb 2023 23:30:05 GMT
+      - Sat, 18 Mar 2023 21:36:27 GMT
       Via:
       - 1.1 vegur
     body:
       encoding: UTF-8
-      string: '{"activity":"Make homemade ice cream","type":"cooking","participants":1,"price":0.2,"link":"","key":"3818400","accessibility":0.2}'
-  recorded_at: Tue, 28 Feb 2023 23:30:05 GMT
+      string: '{"activity":"Compliment someone","type":"social","participants":2,"price":0,"link":"","key":"9149470","accessibility":0}'
+  recorded_at: Sat, 18 Mar 2023 21:36:27 GMT
 recorded_with: VCR 6.1.0
