@@ -7,7 +7,7 @@ class Fern < ApplicationRecord
 
   validates_presence_of :name, :health, :preferred_contact_method, :shelf_id
 
-  after_update :health_limits
+  before_update :health_limits
 
   NEUTRAL_THRESHOLD = 0.25 # health is unaffected within threshold
   HEALTH_MESSAGE_RATIO = 3
