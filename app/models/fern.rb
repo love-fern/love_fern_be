@@ -21,7 +21,7 @@ class Fern < ApplicationRecord
   end
 
   def activity_update(activity)
-    interactions.create(description: activity)
+    interactions.create(evaluation: 4/3, description: activity)
     self.update(health: health + 4)
   end
 
