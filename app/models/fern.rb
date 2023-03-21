@@ -1,6 +1,4 @@
 class Fern < ApplicationRecord
-  has_paper_trail only: :health
-  
   belongs_to :shelf
   has_one :user, through: :shelf
   has_many :interactions, dependent: :destroy
@@ -23,10 +21,6 @@ class Fern < ApplicationRecord
   def activity_update(activity)
     interactions.create(evaluation: 4/3, description: activity)
     self.update(health: health + 4)
-  end
-
-  def health_history
-    versions.filter_map { |version| version.changeset["health"][0] if version.changeset["health"] } << versions.last.changeset["health"][1]
   end
 
   private
