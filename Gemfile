@@ -34,6 +34,7 @@ gem 'jsonapi-serializer'
 
 gem 'rubocop-rails', require: false
 gem 'figaro'
+gem 'paper_trail'
 group :test do
   gem 'shoulda-matchers'
   gem 'simplecov', require: false

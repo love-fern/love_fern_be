@@ -26,7 +26,8 @@ class Api::V1::Users::FernsController < ApplicationController
     if params[:interaction]
       @fern.message_update(SentimentFacade.message_rating(params[:interaction]))
       @fern.save
-      render json: FernSerializer.new(@fern)
+      options = { include: [:interactions] }
+      render json: FernSerializer.new(@fern, options)
     elsif params[:activity]
       @fern.activity_update(params[:activity])
       @fern.save
