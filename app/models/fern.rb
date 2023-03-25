@@ -1,13 +1,11 @@
 class Fern < ApplicationRecord
-  has_paper_trail only: :health
-  
   belongs_to :shelf
   has_one :user, through: :shelf
   has_many :interactions, dependent: :destroy
 
   validates_presence_of :name, :health, :preferred_contact_method, :shelf_id
 
-  after_update :health_limits
+  before_update :health_limits
 
   NEUTRAL_THRESHOLD = 0.25 # health is unaffected within threshold
   HEALTH_MESSAGE_RATIO = 3
@@ -21,7 +19,7 @@ class Fern < ApplicationRecord
   end
 
   def activity_update(activity)
-    interactions.create(description: activity)
+    interactions.create(evaluation: 4/3.to_f, description: activity)
     self.update(health: health + 4)
   end
 

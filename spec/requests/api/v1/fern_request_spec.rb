@@ -316,7 +316,7 @@ RSpec.describe 'ferns API endpoints' do
 
           interaction = updated_fern.interactions.last
 
-          expect(interaction.evaluation).to be_nil
+          expect(interaction.evaluation).to be_within(0.01).of(4/3.to_f)
           expect(interaction.description).to eq('Learn Javascript')
         end
       end

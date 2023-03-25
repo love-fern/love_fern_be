@@ -105,7 +105,7 @@ RSpec.describe Fern do
         last_activity = fern.interactions.last
 
         expect(last_activity.description).to eq("Solve a Rubik's cube")
-        expect(last_activity.evaluation).to be_nil
+        expect(last_activity.evaluation).to be_within(0.01).of(4/3.to_f)
       end
     end
   end
