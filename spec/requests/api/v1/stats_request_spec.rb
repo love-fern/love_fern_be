@@ -15,26 +15,19 @@ RSpec.describe 'stats request' do
 
       expect(parsed_response[:data][:attributes][:name]).to be_a(String)
 
-      health_history = parsed_response[:data][:attributes][:health_history]
-
-      expect(health_history).to be_a(Hash)
-
-      health_history.each do |key, health|
-        expect(key).to be_a(Symbol)
-        expect(health).to be_a(Float)
-      end
-
       included = parsed_response[:included]
 
       expect(included).to be_an(Array)
 
-      included.each do |interaction|
+      interactions = included.select { |x| x[:type] == 'interaction' }
+
+      interactions.each do |interaction|
         expect(interaction[:id]).to be_a(String)
         expect(interaction[:type]).to eq('interaction')
         expect(interaction[:attributes][:evaluation]).to be_a(Float)
       end
 
-      expect(included.count).to eq(fern.interactions.count)
+      expect(interactions.count).to eq(fern.interactions.count)
     end
   end
 end
